@@ -3,6 +3,7 @@ import logo from '../logo.svg';
 import '../App.css';
 import CategoryList from './CategoryList';
 import PostList from './PostList';
+import PostForm from './PostForm';
 
 const categoryList = ["Redux", "React", "Udacity"];
 const postList = ["post1", "post2", "post3"];
@@ -18,6 +19,8 @@ class App extends Component {
         </header>
         <CategoryList list={categoryList} />
         <PostList list={postList} />
+
+        <PostForm />
       </div>
     );
   }
