@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 
 const options = [
     { key: 1, text: 'Redux', value: 1 },
@@ -19,7 +19,7 @@ export default function PostForm({ post }) {
                 <Form.Select options={options} placeholder='Category' error={false} />
                 <Form.TextArea label='Post' placeholder='Post' />
                 <Button.Group>
-                    <Button>Cancel</Button>
+                    <Button>Delete</Button>
                     <Button.Or />
                     <Button positive>Save</Button>
                 </Button.Group>
