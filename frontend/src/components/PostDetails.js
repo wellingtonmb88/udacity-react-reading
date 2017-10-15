@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Form, Grid, Header, Segment, Label, Comment } from 'semantic-ui-react'
-import avatar from '../assets/images/avatar_placeholder.png';
+import { Button, Grid, Segment, Label } from 'semantic-ui-react';
 import Vote from './Vote';
 import Comments from './Comments';
 
