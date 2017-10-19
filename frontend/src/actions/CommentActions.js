@@ -4,37 +4,37 @@ export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const UP_VOTE_COMMENT = 'UP_VOTE_COMMENT';
 export const DOWN_VOTE_COMMENT = 'DOWN_VOTE_COMMENT';
 
-export function addCommnet({ commnet }) {
+export function addComment({ comment }) {
     return {
         type: ADD_COMMENT,
-        commnet
+        comment
     }
 };
 
-export function updateCommnet({ commnet }) {
+export function updateComment({ comment }) {
     return {
         type: UPDATE_COMMENT,
-        commnet
+        comment
     }
 };
 
-export function removeCommnet({ commnetId }) {
+export function removeComment({ commentId }) {
     return {
         type: REMOVE_COMMENT,
-        commnetId
+        commentId
     }
 };
 
-export function upVoteCommnet({ commnetId }) {
+export function upVoteComment({ commentId }) {
     return {
         type: UP_VOTE_COMMENT,
-        commnetId
+        commentId
     }
 };
 
-export function downVoteCommnet({ commnetId }) {
+export function downVoteComment({ commentId }) {
     return {
         type: DOWN_VOTE_COMMENT,
-        commnetId
+        commentId
     }
 };
