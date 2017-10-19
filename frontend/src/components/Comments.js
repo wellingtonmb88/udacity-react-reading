@@ -1,51 +1,21 @@
 import React, { Component } from 'react';
-import { Button, Input, Form, Header, Comment } from 'semantic-ui-react'
+import { connect } from 'react-redux';
+import { Header, Comment } from 'semantic-ui-react';
 import avatar from '../assets/images/avatar_placeholder.png';
 import Vote from './Vote';
-import { connect } from 'react-redux';
-import * as CommentActions from '../actions/CommentActions';
+import CommentForm from './CommentForm';
 import PropTypes from 'prop-types';
+import * as CommentActions from '../actions/CommentActions';
 
 class Comments extends Component {
-
-    state = {
-        commentBody: '',
-        commentAuthor: ''
-    };
 
     static propTypes = {
         commentsList: PropTypes.array.isRequired,
         postId: PropTypes.string.isRequired
     };
 
-    componentDidMount() {
-        console.log(this.props.commentsList)
-    }
-
-    handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-    handleSubmit = () => {
-        const { commentBody, commentAuthor } = this.state
-        const commentId = Math.random().toString(36).substr(-8);
-        const commentTimestamp = Date.now();
-
-        const comment = {
-            id: commentId,
-            timestamp: commentTimestamp,
-            body: commentBody,
-            author: commentAuthor,
-            parentId: this.props.postId,
-            vote: 0
-        };
-        this.props.addComment({ comment });
-
-        this.setState({ commentBody: '' })
-        this.setState({ commentAuthor: '' })
-    }
-
     render() {
-        const { commentsList, removeComment } = this.props;
-        const { commentBody, commentAuthor } = this.state;
+        const { commentsList, removeComment, postId } = this.props;
         return (
             <div >
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -69,25 +39,7 @@ class Comments extends Component {
                                 </Comment.Content>
                             </Comment>
                         ))}
-
-                        <Form reply onSubmit={this.handleSubmit}>
-                            <Form.Field
-                                control={Input}
-                                label='Author'
-                                name='commentAuthor'
-                                value={commentAuthor}
-                                placeholder='Author name'
-                                onChange={this.handleChange} />
-                            <Form.TextArea
-                                name='commentBody'
-                                value={commentBody}
-                                onChange={this.handleChange} />
-                            <Button
-                                content='Add Comment'
-                                labelPosition='left'
-                                icon='edit'
-                                primary />
-                        </Form>
+                        <CommentForm postId={postId} />
                     </Comment.Group>
                 </div>
             </div>
@@ -101,7 +53,6 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        addComment: (data) => dispatch(CommentActions.addComment(data)),
         removeComment: (data) => dispatch(CommentActions.removeComment(data))
     }
 }
