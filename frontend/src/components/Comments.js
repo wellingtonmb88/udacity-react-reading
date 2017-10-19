@@ -18,6 +18,10 @@ class Comments extends Component {
         postId: PropTypes.string.isRequired
     };
 
+    componentDidMount() {
+        console.log(this.props.commentsList)
+    }
+
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
     handleSubmit = () => {
@@ -30,7 +34,8 @@ class Comments extends Component {
             timestamp: commentTimestamp,
             body: commentBody,
             author: commentAuthor,
-            parentId: this.props.postId
+            parentId: this.props.postId,
+            vote: 0
         };
         this.props.addComment({ comment });
 
@@ -39,7 +44,7 @@ class Comments extends Component {
     }
 
     render() {
-        const { commentsList } = this.props;
+        const { commentsList, removeComment } = this.props;
         const { commentBody, commentAuthor } = this.state;
         return (
             <div >
@@ -52,14 +57,14 @@ class Comments extends Component {
                                 <Comment.Content>
                                     <Comment.Author as='a'>{item.author}</Comment.Author>
                                     <Comment.Metadata>
-                                        <span>{item.date}</span>
+                                        <span>{item.timestamp}</span>
                                     </Comment.Metadata>
                                     <Comment.Text>
-                                        <p>{item.post}</p>
+                                        <p>{item.body}</p>
                                         <Vote number={item.vote} />
                                     </Comment.Text>
                                     <Comment.Actions>
-                                        <a onClick={() => this.props.removeComment(item.id)}>Delete</a>
+                                        <a onClick={() => removeComment(item.id)}>Delete</a>
                                     </Comment.Actions>
                                 </Comment.Content>
                             </Comment>
