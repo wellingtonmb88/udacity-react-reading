@@ -39,7 +39,6 @@ class Comments extends Component {
     }
 
     render() {
-        console.log('Props - comments', this.props);
         const { commentsList } = this.props;
         const { commentBody, commentAuthor } = this.state;
         return (
