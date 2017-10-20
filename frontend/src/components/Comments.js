@@ -14,8 +14,21 @@ class Comments extends Component {
         postId: PropTypes.string.isRequired
     };
 
+    handleUpVoteCallback = (commentId) => {
+        this.props.upVote({ commentId })
+    };
+
+    handleDownVoteCallback = (commentId) => {
+        this.props.downVote({ commentId })
+    };
+
     render() {
-        const { commentsList, removeComment, postId } = this.props;
+        const {
+            commentsList,
+            removeComment,
+            postId
+        } = this.props;
+
         return (
             <div >
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -31,7 +44,11 @@ class Comments extends Component {
                                     </Comment.Metadata>
                                     <Comment.Text>
                                         <p>{item.body}</p>
-                                        <Vote number={item.vote} />
+                                        <Vote
+                                            itemId={item.id}
+                                            number={item.voteScore}
+                                            upVote={this.handleUpVoteCallback}
+                                            downVote={this.handleDownVoteCallback} />
                                     </Comment.Text>
                                     <Comment.Actions>
                                         <a onClick={() => removeComment(item.id)}>Delete</a>
@@ -53,7 +70,9 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        removeComment: (data) => dispatch(CommentActions.removeComment(data))
+        removeComment: (data) => dispatch(CommentActions.removeComment(data)),
+        upVote: (data) => dispatch(CommentActions.upVoteComment(data)),
+        downVote: (data) => dispatch(CommentActions.downVoteComment(data))
     }
 }
 export default connect(
