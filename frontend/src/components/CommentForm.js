@@ -28,7 +28,8 @@ class CommentForm extends Component {
             body: commentBody,
             author: commentAuthor,
             parentId: this.props.postId,
-            voteScore: 0
+            voteScore: 0,
+            deleted: false
         };
         this.props.addComment({ comment });
 
