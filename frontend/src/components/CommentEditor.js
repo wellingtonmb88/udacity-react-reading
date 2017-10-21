@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Input, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
+import CommentForm from './CommentForm';
 
 class CommentEditor extends Component {
 
@@ -17,19 +17,18 @@ class CommentEditor extends Component {
         commentId: PropTypes.string
     };
 
-    componentDidMount() {
+    componentWillMount() {
         const { commentId, comments } = this.props;
         const comment = comments[commentId];
+
         this.setState({ commentBody: comment.body});
         this.setState({ commentAuthor: comment.author});
         this.setState({ parentId: comment.parentId});
         this.setState({ voteScore: comment.voteScore});
     }
 
-    handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-    handleSubmit = () => {
-        const { commentBody, commentAuthor, parentId, voteScore } = this.state
+    handleSubmit = (commentAuthor, commentBody) => {
+        const { parentId, voteScore } = this.state
         const { commentId, updateComment } = this.props;
         const commentTimestamp = Date.now();
 
@@ -48,26 +47,13 @@ class CommentEditor extends Component {
 
     render() {
         const { commentBody, commentAuthor } = this.state;
+        console.log(commentAuthor)
         return (
             <div >
-                <Form reply onSubmit={this.handleSubmit}>
-                    <Form.Field
-                        control={Input}
-                        label='Author'
-                        name='commentAuthor'
-                        value={commentAuthor}
-                        placeholder='Author name'
-                        onChange={this.handleChange} />
-                    <Form.TextArea
-                        name='commentBody'
-                        value={commentBody}
-                        onChange={this.handleChange} />
-                    <Button
-                        content='Update Comment'
-                        labelPosition='left'
-                        icon='edit'
-                        primary />
-                </Form>
+                <CommentForm
+                    commentAuthor={commentAuthor}
+                    commentBody={commentBody}
+                    handleSubmit={this.handleSubmit} />
             </div>
         )
     }
