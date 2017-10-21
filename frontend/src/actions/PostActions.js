@@ -1,8 +1,23 @@
+export const LOAD_POSTS = 'LOAD_POSTS';
+export const LOAD_POSTS_BY_CATEGORY = 'LOAD_POSTS_BY_CATEGORY';
 export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const UP_VOTE_POST = 'UP_VOTE_POST';
 export const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
+
+export function loadPosts() {
+    return {
+        type: LOAD_POSTS
+    }
+};
+
+export function loadPostsByCategory({ category }) {
+    return {
+        type: LOAD_POSTS_BY_CATEGORY,
+        category
+    }
+};
 
 export function addPost({ post }) {
     return {
