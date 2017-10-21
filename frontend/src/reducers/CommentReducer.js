@@ -1,4 +1,5 @@
 import {
+    LOAD_COMMENTS,
     ADD_COMMENT,
     UPDATE_COMMENT,
     REMOVE_COMMENT,
@@ -7,8 +8,14 @@ import {
 } from '../actions/CommentActions'
 
 export function reducer(state = {}, action) {
-    const { comment, commentId } = action
+    const { comments, comment, commentId } = action
     switch (action.type) {
+
+        case LOAD_COMMENTS:
+            return {
+                ...state,
+                items: comments
+            }
 
         case ADD_COMMENT:
         case UPDATE_COMMENT:

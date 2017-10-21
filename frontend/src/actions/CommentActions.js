@@ -1,3 +1,6 @@
+
+import * as PostAPI from '../utils/PostAPI';
+
 export const LOAD_COMMENTS = 'LOAD_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
@@ -5,9 +8,10 @@ export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const UP_VOTE_COMMENT = 'UP_VOTE_COMMENT';
 export const DOWN_VOTE_COMMENT = 'DOWN_VOTE_COMMENT';
 
-export function loadComments() {
+export function loadComments(comments) {
     return {
-        type: LOAD_COMMENTS
+        type: LOAD_COMMENTS,
+        comments
     }
 };
 
@@ -45,3 +49,8 @@ export function downVoteComment({ commentId }) {
         commentId
     }
 };
+
+export const fetchCommentsByPost = (post) => dispatch => (
+    PostAPI.getAllCommentsFromPost(post)
+        .then(comments => dispatch(loadComments(comments)))
+);
