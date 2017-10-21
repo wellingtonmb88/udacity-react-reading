@@ -1,4 +1,6 @@
 import {
+    LOAD_POSTS,
+    LOAD_POSTS_BY_CATEGORY,
     ADD_POST,
     UPDATE_POST,
     REMOVE_POST,
@@ -8,8 +10,15 @@ import {
 
 
 export function reducer(state = {}, action) {
-    const { post, postId } = action
+    const {posts, post, postId } = action
     switch (action.type) {
+
+        case LOAD_POSTS:
+        case LOAD_POSTS_BY_CATEGORY:
+        return {
+            ...state,
+            items: posts
+        }
 
         case ADD_POST:
         case UPDATE_POST:

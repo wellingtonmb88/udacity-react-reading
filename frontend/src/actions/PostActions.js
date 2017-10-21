@@ -1,3 +1,6 @@
+
+import * as PostAPI from '../utils/PostAPI';
+
 export const LOAD_POSTS = 'LOAD_POSTS';
 export const LOAD_POSTS_BY_CATEGORY = 'LOAD_POSTS_BY_CATEGORY';
 export const ADD_POST = 'ADD_POST';
@@ -6,16 +9,18 @@ export const REMOVE_POST = 'REMOVE_POST';
 export const UP_VOTE_POST = 'UP_VOTE_POST';
 export const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
 
-export function loadPosts() {
+export function loadPosts(posts) {
     return {
-        type: LOAD_POSTS
+        type: LOAD_POSTS,
+        posts
     }
 };
 
-export function loadPostsByCategory({ category }) {
+export function loadPostsByCategory(category, posts) {
     return {
         type: LOAD_POSTS_BY_CATEGORY,
-        category
+        category,
+        posts
     }
 };
 
@@ -53,3 +58,13 @@ export function downVotePost({ postId }) {
         postId
     }
 };
+
+export const fetchPosts = () => dispatch => (
+    PostAPI.getAllPosts()
+        .then(posts => dispatch(loadPosts(posts)))
+);
+
+export const fetchCommentsByCategory = (category) => dispatch => (
+    PostAPI.getPostsByCategory(category)
+        .then(posts => dispatch(loadPostsByCategory(category, posts)))
+);
