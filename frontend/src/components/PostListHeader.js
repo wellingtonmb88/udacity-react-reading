@@ -1,27 +1,64 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, Dropdown, Divider, Grid } from 'semantic-ui-react';
+import * as PostActions from '../actions/PostActions';
+
+const VOTE_SCORE = 'Vote Score';
+const CREATION_DATE = 'Creation Date';
 
 const options = [
-    { key: 1, text: 'Vote Score', value: 1 },
-    { key: 2, text: 'Creation Date', value: 2 }
-  ];
+    { key: 1, text: VOTE_SCORE, value: 1 },
+    { key: 2, text: CREATION_DATE, value: 2 }
+];
 
-export default function PostListHeader() {
-    return (
-        <div>
-            <Divider />
-            <h1> Posts</h1>
-            <Grid columns={2} container divided >
-                <Grid.Row>
-                    <Grid.Column>
-                        <Button primary>Create New Post</Button>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Dropdown upward search selection options={options} placeholder='Ordered by Vote Score' />
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-            <Divider />
-        </div>
-    )
+class PostListHeader extends Component {
+
+    handleSelectChange = (e, { value }) => {
+        const { sortPostsByVote, sortPostsByDate } = this.props;
+
+        const orderSelected = options.filter(item => item.value === value)[0].text;
+
+        if (orderSelected === VOTE_SCORE) {
+            sortPostsByVote();
+        } else {
+            sortPostsByDate();
+        }
+    };
+
+    render() {
+        return (
+            <div>
+                <Divider />
+                <h1> Posts</h1>
+                <Grid columns={2} container divided >
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Button primary>Create New Post</Button>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Dropdown upward search selection
+                                options={options}
+                                placeholder={'Ordered by ' + VOTE_SCORE}
+                                onChange={this.handleSelectChange} />
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+                <Divider />
+            </div>
+        )
+    }
 };
+
+const mapStateToProps = (state) => ({
+    posts: state.posts
+});
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        sortPostsByDate: () => dispatch(PostActions.sortPostsByDate()),
+        sortPostsByVote: () => dispatch(PostActions.sortPostsByVote())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostListHeader);

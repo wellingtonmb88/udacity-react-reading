@@ -6,8 +6,8 @@ import {
     REMOVE_POST,
     UP_VOTE_POST,
     DOWN_VOTE_POST,
-    SORT_POST_BY_DATE,
-    SORT_POST_BY_VOTE
+    SORT_POSTS_BY_DATE,
+    SORT_POSTS_BY_VOTE
 } from '../actions/PostActions';
 
 const getArrayIndexByItemId = (array, itemId) => {
@@ -99,7 +99,7 @@ export function reducer(state = {}, action) {
                 ]
             }
 
-        case SORT_POST_BY_DATE:
+        case SORT_POSTS_BY_DATE:
             if (state.items) {
                 let arryByDate = [...state.items];
                 sortOn(arryByDate, "timestamp");
@@ -111,10 +111,11 @@ export function reducer(state = {}, action) {
                 return state
             }
 
-        case SORT_POST_BY_VOTE:
+        case SORT_POSTS_BY_VOTE:
             if (state.items) {
                 let arryByVote = [...state.items];
                 sortOn(arryByVote, "voteScore");
+                arryByVote.reverse();
                 return {
                     ...state,
                     items: arryByVote

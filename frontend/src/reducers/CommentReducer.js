@@ -43,9 +43,9 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexUpdate].author = comment.author,
-                    state.items[indexUpdate].body = comment.body,
-                    state.items[indexUpdate].timestamp = comment.timestamp
+                    ...state.items[indexUpdate].author = comment.author,
+                    ...state.items[indexUpdate].body = comment.body,
+                    ...state.items[indexUpdate].timestamp = comment.timestamp
                 ]
             }
 
@@ -55,7 +55,7 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexRemove].deleted = true
+                    ...state.items[indexRemove].deleted = true
                 ]
             }
 
@@ -65,7 +65,7 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexUpVote].voteScore = state.items[indexUpVote].voteScore + 1
+                    ...state.items[indexUpVote].voteScore = state.items[indexUpVote].voteScore + 1
                 ]
             }
 
@@ -75,7 +75,7 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexDownVote].voteScore = state.items[indexDownVote].voteScore - 1
+                    ...state.items[indexDownVote].voteScore = state.items[indexDownVote].voteScore - 1
                 ]
             }
 

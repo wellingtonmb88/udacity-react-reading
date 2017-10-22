@@ -8,15 +8,17 @@ export const UPDATE_POST = 'UPDATE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const UP_VOTE_POST = 'UP_VOTE_POST';
 export const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
+export const SORT_POSTS_BY_DATE = 'SORT_POSTS_BY_DATE';
+export const SORT_POSTS_BY_VOTE = 'SORT_POSTS_BY_VOTE';
 
-export function loadPosts(posts) {
+function loadPosts(posts) {
     return {
         type: LOAD_POSTS,
         posts
     }
 };
 
-export function loadPostsByCategory(category, posts) {
+function loadPostsByCategory(category, posts) {
     return {
         type: LOAD_POSTS_BY_CATEGORY,
         category,
@@ -24,38 +26,50 @@ export function loadPostsByCategory(category, posts) {
     }
 };
 
-export function addPost(post) {
+function addPost(post) {
     return {
         type: ADD_POST,
         post
     }
 };
 
-export function updatePost(post) {
+function updatePost(post) {
     return {
         type: UPDATE_POST,
         post
     }
 };
 
-export function removePost(postId) {
+function removePost(postId) {
     return {
         type: REMOVE_POST,
         postId
     }
 };
 
-export function upVotePost(postId) {
+function upVotePost(postId) {
     return {
         type: UP_VOTE_POST,
         postId
     }
 };
 
-export function downVotePost(postId) {
+function downVotePost(postId) {
     return {
         type: DOWN_VOTE_POST,
         postId
+    }
+};
+
+export function sortPostsByDate() {
+    return {
+        type: SORT_POSTS_BY_DATE
+    }
+};
+
+export function sortPostsByVote() {
+    return {
+        type: SORT_POSTS_BY_VOTE
     }
 };
 
@@ -77,6 +91,11 @@ export const addNewPost = (post) => dispatch => (
 export const editPost = (post) => dispatch => (
     PostAPI.updatePost(post)
         .then(dispatch(updatePost(post)))
+);
+
+export const deletePost = (postId) => dispatch => (
+    PostAPI.deletePost(postId)
+        .then(dispatch(removePost(postId)))
 );
 
 export const upVotingPost = (postId) => dispatch => (

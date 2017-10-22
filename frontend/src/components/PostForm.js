@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Form, Label } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import * as PostActions from '../actions/PostActions';
-
-const options = [
-    { key: 1, text: 'Redux', value: 1 },
-    { key: 2, text: 'React', value: 2 },
-    { key: 3, text: 'Udacity', value: 3 }
-];
+import * as CategoryActions from '../actions/CategoryActions';
 
 class PostForm extends Component {
 
@@ -17,7 +11,8 @@ class PostForm extends Component {
         author: '',
         title: '',
         category: 'Category',
-        date: ''
+        date: '',
+        options: []
     };
 
     static propTypes = {
@@ -30,7 +25,19 @@ class PostForm extends Component {
     };
 
     componentDidMount() {
-        const { postBody, postAuthor, postTitle, postCategory, postDate } = this.props;
+        const { postBody, postAuthor, postTitle, postCategory, postDate, categories } = this.props;
+
+        if (categories.items) {
+            let options = [];
+            let index = 1;
+            categories.items.map(category => {
+                options.push({ key: index, text: category.name, value: index });
+                index++;
+            });
+
+            this.setState({ options });
+        }
+
         this.setState({ body: postBody });
         this.setState({ author: postAuthor });
         this.setState({ title: postTitle });
@@ -43,7 +50,8 @@ class PostForm extends Component {
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
     handleSelectChange = (e, { value }) => {
-        const categorySelected = options.filter(item => item.value === value)[0].text;
+        const { categories } = this.props;
+        const categorySelected = categories.items.filter(item => item.name === value)[0].text;
         this.setState({ category: categorySelected });
     }
 
@@ -59,7 +67,7 @@ class PostForm extends Component {
     }
 
     render() {
-        const { date, author, title, body, category } = this.state;
+        const { date, author, title, body, category, options } = this.state;
         return (
             <div>
                 <div style={{ justifyContent: 'center' }}>
@@ -99,13 +107,9 @@ class PostForm extends Component {
 };
 
 const mapStateToProps = (state) => ({
-    posts: state.posts
+    categories: state.categories
 });
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addPost: (data) => dispatch(PostActions.addPost(data))
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(PostForm);
-
+export default connect(
+    mapStateToProps
+)(PostForm);
