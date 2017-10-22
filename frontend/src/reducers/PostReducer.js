@@ -6,7 +6,7 @@ import {
     REMOVE_POST,
     UP_VOTE_POST,
     DOWN_VOTE_POST
-} from '../actions/PostActions'
+} from '../actions/PostActions';
 
 const getArrayIndexByItemId = (array, itemId) => {
     let index = 0;
@@ -17,7 +17,7 @@ const getArrayIndexByItemId = (array, itemId) => {
         index++;
     }
     return index;
-}
+};
 
 export function reducer(state = {}, action) {
     const { posts, post, postId } = action
@@ -31,12 +31,25 @@ export function reducer(state = {}, action) {
             }
 
         case ADD_POST:
-        case UPDATE_POST:
             return {
                 ...state,
                 items: [
                     ...state.items,
                     post
+                ]
+            }
+
+        case UPDATE_POST:
+            const indexUpdate = getArrayIndexByItemId(state.items, post.id);
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    state.items[indexUpdate].author = post.author,
+                    state.items[indexUpdate].author = post.title,
+                    state.items[indexUpdate].body = post.body,
+                    state.items[indexUpdate].body = post.category,
+                    state.items[indexUpdate].timestamp = post.timestamp
                 ]
             }
 
