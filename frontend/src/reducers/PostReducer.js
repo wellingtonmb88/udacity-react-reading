@@ -5,7 +5,9 @@ import {
     UPDATE_POST,
     REMOVE_POST,
     UP_VOTE_POST,
-    DOWN_VOTE_POST
+    DOWN_VOTE_POST,
+    SORT_POST_BY_DATE,
+    SORT_POST_BY_VOTE
 } from '../actions/PostActions';
 
 const getArrayIndexByItemId = (array, itemId) => {
@@ -18,6 +20,20 @@ const getArrayIndexByItemId = (array, itemId) => {
     }
     return index;
 };
+
+function sortOn(arr, prop) {
+    arr.sort(
+        function (a, b) {
+            if (a[prop] < b[prop]) {
+                return -1;
+            } else if (a[prop] > b[prop]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    );
+}
 
 export function reducer(state = {}, action) {
     const { posts, post, postId } = action
@@ -45,11 +61,11 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexUpdate].author = post.author,
-                    state.items[indexUpdate].author = post.title,
-                    state.items[indexUpdate].body = post.body,
-                    state.items[indexUpdate].body = post.category,
-                    state.items[indexUpdate].timestamp = post.timestamp
+                    ...state.items[indexUpdate].author = post.author,
+                    ...state.items[indexUpdate].author = post.title,
+                    ...state.items[indexUpdate].body = post.body,
+                    ...state.items[indexUpdate].body = post.category,
+                    ...state.items[indexUpdate].timestamp = post.timestamp
                 ]
             }
 
@@ -59,7 +75,7 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexRemove].deleted = true
+                    ...state.items[indexRemove].deleted = true
                 ]
             }
 
@@ -69,7 +85,7 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexUpVote].voteScore = state.items[indexUpVote].voteScore + 1
+                    ...state.items[indexUpVote].voteScore = state.items[indexUpVote].voteScore + 1
                 ]
             }
 
@@ -79,8 +95,32 @@ export function reducer(state = {}, action) {
                 ...state,
                 items: [
                     ...state.items,
-                    state.items[indexDownVote].voteScore = state.items[indexDownVote].voteScore - 1
+                    ...state.items[indexDownVote].voteScore = state.items[indexDownVote].voteScore - 1
                 ]
+            }
+
+        case SORT_POST_BY_DATE:
+            if (state.items) {
+                let arryByDate = [...state.items];
+                sortOn(arryByDate, "timestamp");
+                return {
+                    ...state,
+                    items: arryByDate
+                }
+            } else {
+                return state
+            }
+
+        case SORT_POST_BY_VOTE:
+            if (state.items) {
+                let arryByVote = [...state.items];
+                sortOn(arryByVote, "voteScore");
+                return {
+                    ...state,
+                    items: arryByVote
+                }
+            } else {
+                return state
             }
 
         default:
