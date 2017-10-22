@@ -44,7 +44,7 @@ class PostForm extends Component {
         if (categoryList) {
             let options = [];
             let index = 1;
-            categoryList.map(category => {
+            categoryList.forEach(category => {
                 options.push({ key: index, text: category.name, value: category.name });
                 index++;
             });
