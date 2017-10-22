@@ -16,11 +16,11 @@ class PostCreator extends Component {
             author: postAuthor,
             title: postTitle,
             category: postCategory,
-            voteScore: 0,
+            voteScore: 1,
             deleted: false
         };
 
-        this.props.addPost({ post });
+        this.props.addPost(post);
     }
 
     render() {
@@ -40,7 +40,7 @@ class PostCreator extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addPost: (data) => dispatch(PostActions.addPost(data))
+        addPost: (data) => dispatch(PostActions.addNewPost(data))
     }
 }
 export default connect(null, mapDispatchToProps)(PostCreator);

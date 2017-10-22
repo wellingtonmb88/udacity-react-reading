@@ -8,51 +8,67 @@ import {
     DOWN_VOTE_POST
 } from '../actions/PostActions'
 
+const getArrayIndexByItemId = (array, itemId) => {
+    let index = 0;
+    for (let item of array) {
+        if (item.id === itemId) {
+            break;
+        }
+        index++;
+    }
+    return index;
+}
 
 export function reducer(state = {}, action) {
-    const {posts, post, postId } = action
+    const { posts, post, postId } = action
     switch (action.type) {
 
         case LOAD_POSTS:
         case LOAD_POSTS_BY_CATEGORY:
-        return {
-            ...state,
-            items: posts
-        }
+            return {
+                ...state,
+                items: posts
+            }
 
         case ADD_POST:
         case UPDATE_POST:
             return {
                 ...state,
-                [post.id]: post
+                items: [
+                    ...state.items,
+                    post
+                ]
             }
 
         case REMOVE_POST:
-            return state[postId] ? {
+            const indexRemove = getArrayIndexByItemId(state.items, postId);
+            return {
                 ...state,
-                [postId]: {
-                    ...state[postId],
-                    deleted: true
-                }
-            } : state
+                items: [
+                    ...state.items,
+                    state.items[indexRemove].deleted = true
+                ]
+            }
 
         case UP_VOTE_POST:
-            return state[postId] ? {
+            const indexUpVote = getArrayIndexByItemId(state.items, postId);
+            return {
                 ...state,
-                [postId]: {
-                    ...state[postId],
-                    voteScore: state[postId].voteScore + 1
-                }
-            } : state
+                items: [
+                    ...state.items,
+                    state.items[indexUpVote].voteScore = state.items[indexUpVote].voteScore + 1
+                ]
+            }
 
         case DOWN_VOTE_POST:
-            return state[postId] ? {
+            const indexDownVote = getArrayIndexByItemId(state.items, postId);
+            return {
                 ...state,
-                [postId]: {
-                    ...state[postId],
-                    voteScore: state[postId].voteScore - 1
-                }
-            } : state
+                items: [
+                    ...state.items,
+                    state.items[indexDownVote].voteScore = state.items[indexDownVote].voteScore - 1
+                ]
+            }
 
         default:
             return state

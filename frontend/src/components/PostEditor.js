@@ -21,7 +21,7 @@ class PostEditor extends Component {
 
     componentWillMount() {
         const { postId, posts } = this.props;
-        const post = posts[postId];
+        const post = posts.items.filter(item => item.id === postId);
 
         this.setState({ postBody: post.body });
         this.setState({ postAuthor: post.author });
@@ -46,7 +46,7 @@ class PostEditor extends Component {
             deleted: false
         };
 
-        updatePost({ post });
+        updatePost(post);
     }
 
     handleSubmit = (postAuthor, postTitle, postBody, postCategory) => {
@@ -90,7 +90,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        updatePost: (data) => dispatch(PostActions.updatePost(data))
+        updatePost: (data) => dispatch(PostActions.editPost(data))
     }
 };
 

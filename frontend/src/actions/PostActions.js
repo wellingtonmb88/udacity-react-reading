@@ -24,35 +24,35 @@ export function loadPostsByCategory(category, posts) {
     }
 };
 
-export function addPost({ post }) {
+export function addPost(post) {
     return {
         type: ADD_POST,
         post
     }
 };
 
-export function updatePost({ post }) {
+export function updatePost(post) {
     return {
         type: UPDATE_POST,
         post
     }
 };
 
-export function removePost({ postId }) {
+export function removePost(postId) {
     return {
         type: REMOVE_POST,
         postId
     }
 };
 
-export function upVotePost({ postId }) {
+export function upVotePost(postId) {
     return {
         type: UP_VOTE_POST,
         postId
     }
 };
 
-export function downVotePost({ postId }) {
+export function downVotePost(postId) {
     return {
         type: DOWN_VOTE_POST,
         postId
@@ -67,4 +67,24 @@ export const fetchPosts = () => dispatch => (
 export const fetchCommentsByCategory = (category) => dispatch => (
     PostAPI.getPostsByCategory(category)
         .then(posts => dispatch(loadPostsByCategory(category, posts)))
+);
+
+export const addNewPost = (post) => dispatch => (
+    PostAPI.addPost(post)
+        .then(dispatch(addPost(post)))
+);
+
+export const editPost = (post) => dispatch => (
+    PostAPI.updatePost(post)
+        .then(dispatch(updatePost(post)))
+);
+
+export const upVotingPost = (postId) => dispatch => (
+    PostAPI.upVotePost(postId)
+        .then(dispatch(upVotePost(postId)))
+);
+
+export const downVotingPost = (postId) => dispatch => (
+    PostAPI.downVotePost(postId)
+        .then(dispatch(downVotePost(postId)))
 );
