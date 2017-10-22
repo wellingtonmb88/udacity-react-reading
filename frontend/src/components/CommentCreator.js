@@ -24,7 +24,7 @@ class CommentCreator extends Component {
             deleted: false
         };
 
-        this.props.addComment({ comment });
+        this.props.addComment(comment);
     }
 
     render() {
@@ -41,7 +41,7 @@ class CommentCreator extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addComment: (data) => dispatch(CommentActions.addComment(data))
+        addComment: (data) => dispatch(CommentActions.addNewComment(data))
     }
 }
 export default connect(null, mapDispatchToProps)(CommentCreator);

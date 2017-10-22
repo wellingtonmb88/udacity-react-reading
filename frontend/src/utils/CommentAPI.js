@@ -16,8 +16,8 @@ export const addComment = (comment) =>
         body: JSON.stringify(comment)
     }).then(res => res.json());
 
-export const upVoteComment = (comment) =>
-    fetch(`${api}/comments/${comment.id}`, {
+export const upVoteComment = (commentId) =>
+    fetch(`${api}/comments/${commentId}`, {
         method: 'POST',
         headers: {
             ...headers,
@@ -26,8 +26,8 @@ export const upVoteComment = (comment) =>
         body: JSON.stringify({ option: "upVote" })
     }).then(res => res.json());
 
-export const downVoteComment = (comment) =>
-    fetch(`${api}/comments/${comment.id}`, {
+export const downVoteComment = (commentId) =>
+    fetch(`${api}/comments/${commentId}`, {
         method: 'POST',
         headers: {
             ...headers,
@@ -46,9 +46,9 @@ export const updateComment = (comment) =>
         body: JSON.stringify(comment)
     }).then(res => res.json());
 
-export const deleteComment = (comment) =>
-    fetch(`${api}/comments/${comment.id}`, {
-        method: 'PUT',
+export const deleteComment = (commentId) =>
+    fetch(`${api}/comments/${commentId}`, {
+        method: 'DELETE',
         headers: {
             ...headers,
             'Content-Type': 'application/json'

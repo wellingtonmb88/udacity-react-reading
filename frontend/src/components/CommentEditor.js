@@ -19,12 +19,12 @@ class CommentEditor extends Component {
 
     componentWillMount() {
         const { commentId, comments } = this.props;
-        const comment = comments[commentId];
+        const comment = comments.items.filter(item => item.id === commentId)[0];
 
-        this.setState({ commentBody: comment.body});
-        this.setState({ commentAuthor: comment.author});
-        this.setState({ parentId: comment.parentId});
-        this.setState({ voteScore: comment.voteScore});
+        this.setState({ commentBody: comment.body });
+        this.setState({ commentAuthor: comment.author });
+        this.setState({ parentId: comment.parentId });
+        this.setState({ voteScore: comment.voteScore });
     }
 
     handleSubmit = (commentAuthor, commentBody) => {
@@ -42,12 +42,11 @@ class CommentEditor extends Component {
             deleted: false
         };
 
-        updateComment({ comment });
+        updateComment(comment);
     }
 
     render() {
         const { commentBody, commentAuthor } = this.state;
-        console.log(commentAuthor)
         return (
             <div >
                 <CommentForm
@@ -65,7 +64,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        updateComment: (data) => dispatch(CommentActions.updateComment(data))
+        updateComment: (data) => dispatch(CommentActions.editComment(data))
     }
 }
 export default connect(

@@ -64,7 +64,7 @@ export const fetchPosts = () => dispatch => (
         .then(posts => dispatch(loadPosts(posts)))
 );
 
-export const fetchCommentsByCategory = (category) => dispatch => (
+export const fetchPostsByCategory = (category) => dispatch => (
     PostAPI.getPostsByCategory(category)
         .then(posts => dispatch(loadPostsByCategory(category, posts)))
 );
