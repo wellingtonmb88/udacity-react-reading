@@ -20,7 +20,7 @@ class CommentCreator extends Component {
             body: commentBody,
             author: commentAuthor,
             parentId: this.props.postId,
-            voteScore: 0,
+            voteScore: 1,
             deleted: false
         };
 

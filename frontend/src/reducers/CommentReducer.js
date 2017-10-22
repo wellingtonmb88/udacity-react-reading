@@ -5,7 +5,18 @@ import {
     REMOVE_COMMENT,
     UP_VOTE_COMMENT,
     DOWN_VOTE_COMMENT
-} from '../actions/CommentActions'
+} from '../actions/CommentActions';
+
+const getArrayIndexByItemId = (array, itemId) => {
+    let index = 0;
+    for (let item of array) {
+        if (item.id === itemId) {
+            break;
+        }
+        index++;
+    }
+    return index;
+};
 
 export function reducer(state = {}, action) {
     const { comments, comment, commentId } = action
@@ -18,38 +29,55 @@ export function reducer(state = {}, action) {
             }
 
         case ADD_COMMENT:
-        case UPDATE_COMMENT:
             return {
                 ...state,
-                [comment.id]: comment
+                items: [
+                    ...state.items,
+                    comment
+                ]
+            }
+
+        case UPDATE_COMMENT:
+            const indexUpdate = getArrayIndexByItemId(state.items, comment.id);
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    state.items[indexUpdate].author = comment.author,
+                    state.items[indexUpdate].body = comment.body,
+                    state.items[indexUpdate].timestamp = comment.timestamp
+                ]
             }
 
         case REMOVE_COMMENT:
-            return state[commentId] ? {
+            const indexRemove = getArrayIndexByItemId(state.items, commentId);
+            return {
                 ...state,
-                [commentId]: {
-                    ...state[commentId],
-                    deleted: true
-                }
-            } : state
+                items: [
+                    ...state.items,
+                    state.items[indexRemove].deleted = true
+                ]
+            }
 
         case UP_VOTE_COMMENT:
-            return state[commentId] ? {
+            const indexUpVote = getArrayIndexByItemId(state.items, commentId);
+            return {
                 ...state,
-                [commentId]: {
-                    ...state[commentId],
-                    voteScore: state[commentId].voteScore + 1
-                }
-            } : state
+                items: [
+                    ...state.items,
+                    state.items[indexUpVote].voteScore = state.items[indexUpVote].voteScore + 1
+                ]
+            }
 
         case DOWN_VOTE_COMMENT:
-            return state[commentId] ? {
+            const indexDownVote = getArrayIndexByItemId(state.items, commentId);
+            return {
                 ...state,
-                [commentId]: {
-                    ...state[commentId],
-                    voteScore: state[commentId].voteScore - 1
-                }
-            } : state
+                items: [
+                    ...state.items,
+                    state.items[indexDownVote].voteScore = state.items[indexDownVote].voteScore - 1
+                ]
+            }
 
         default:
             return state
