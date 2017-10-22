@@ -103,6 +103,7 @@ export function reducer(state = {}, action) {
             if (state.items) {
                 let arryByDate = [...state.items];
                 sortOn(arryByDate, "timestamp");
+                arryByDate.reverse();
                 return {
                     ...state,
                     items: arryByDate

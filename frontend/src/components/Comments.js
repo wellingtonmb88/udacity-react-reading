@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Moment from 'react-moment';
 import { Header, Comment } from 'semantic-ui-react';
 import avatar from '../assets/images/avatar_placeholder.png';
 import Vote from './Vote';
@@ -66,7 +67,7 @@ class Comments extends Component {
                                     <Comment.Content>
                                         <Comment.Author as='a'>{item.author}</Comment.Author>
                                         <Comment.Metadata>
-                                            <span>{item.timestamp}</span>
+                                            <Moment fromNow>{item.timestamp}</Moment>
                                         </Comment.Metadata>
                                         <Comment.Text>
                                             <p>{item.body}</p>

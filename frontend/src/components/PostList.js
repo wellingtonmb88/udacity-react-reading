@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, List, Modal } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import Moment from 'react-moment';
 import avatar from '../assets/images/avatar_placeholder.png';
 import PostListHeader from './PostListHeader';
 import Vote from './Vote';
@@ -57,6 +58,7 @@ class PostList extends Component {
                             <List.Content>
                                 <List.Header as='a'>{item.title}</List.Header>
                                 <List.Content>{item.body}</List.Content>
+                                <Moment fromNow>{item.timestamp}</Moment>
                                 <Vote
                                     itemId={item.id}
                                     number={item.voteScore}
