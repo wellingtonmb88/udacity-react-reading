@@ -57,16 +57,11 @@ export function reducer(state = {}, action) {
 
         case UPDATE_POST:
             const indexUpdate = getArrayIndexByItemId(state.items, post.id);
+            let newArray = [...state.items];
+            newArray[indexUpdate] = post;
             return {
                 ...state,
-                items: [
-                    ...state.items,
-                    ...state.items[indexUpdate].author = post.author,
-                    ...state.items[indexUpdate].author = post.title,
-                    ...state.items[indexUpdate].body = post.body,
-                    ...state.items[indexUpdate].body = post.category,
-                    ...state.items[indexUpdate].timestamp = post.timestamp
-                ]
+                items: newArray
             }
 
         case REMOVE_POST:
@@ -101,12 +96,12 @@ export function reducer(state = {}, action) {
 
         case SORT_POSTS_BY_DATE:
             if (state.items) {
-                let arryByDate = [...state.items];
-                sortOn(arryByDate, "timestamp");
-                arryByDate.reverse();
+                let arrayByDate = [...state.items];
+                sortOn(arrayByDate, "timestamp");
+                arrayByDate.reverse();
                 return {
                     ...state,
-                    items: arryByDate
+                    items: arrayByDate
                 }
             } else {
                 return state
@@ -114,12 +109,12 @@ export function reducer(state = {}, action) {
 
         case SORT_POSTS_BY_VOTE:
             if (state.items) {
-                let arryByVote = [...state.items];
-                sortOn(arryByVote, "voteScore");
-                arryByVote.reverse();
+                let arrayByVote = [...state.items];
+                sortOn(arrayByVote, "voteScore");
+                arrayByVote.reverse();
                 return {
                     ...state,
-                    items: arryByVote
+                    items: arrayByVote
                 }
             } else {
                 return state

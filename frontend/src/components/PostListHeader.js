@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Dropdown, Divider, Grid } from 'semantic-ui-react';
 import * as PostActions from '../actions/PostActions';
+import * as PostFormActions from '../actions/PostFormActions';
 
 const VOTE_SCORE = 'Vote Score';
 const CREATION_DATE = 'Creation Date';
@@ -33,7 +34,7 @@ class PostListHeader extends Component {
                 <Grid columns={2} container divided >
                     <Grid.Row>
                         <Grid.Column>
-                            <Button primary>Create New Post</Button>
+                            <Button primary onClick={()=> this.props.openPostForm(undefined)}>Create New Post</Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown upward search selection
@@ -56,6 +57,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
+        openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         sortPostsByDate: () => dispatch(PostActions.sortPostsByDate()),
         sortPostsByVote: () => dispatch(PostActions.sortPostsByVote())
     }

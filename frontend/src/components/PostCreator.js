@@ -12,26 +12,21 @@ class PostCreator extends Component {
         const post = {
             id: postId,
             timestamp: postTimestamp,
-            body: postBody,
-            author: postAuthor,
-            title: postTitle,
-            category: postCategory,
+            body: postBody !== undefined ? postBody : '',
+            author: postAuthor !== undefined ? postAuthor : '',
+            title: postTitle !== undefined ? postTitle : '',
+            category: postCategory !== undefined ? postCategory : '',
             voteScore: 1,
             deleted: false
         };
 
         this.props.addPost(post);
-    }
+    };
 
     render() {
         return (
             <div >
                 <PostForm
-                    postAuthor=''
-                    postBody=''
-                    postTitle=''
-                    postCategory=''
-                    postDate=''
                     handleSubmit={this.handleSubmit} />
             </div>
         )

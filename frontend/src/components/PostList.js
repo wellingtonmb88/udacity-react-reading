@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { Image, List, Modal } from 'semantic-ui-react';
+import { Image, Card, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import avatar from '../assets/images/avatar_placeholder.png';
 import PostListHeader from './PostListHeader';
 import Vote from './Vote';
 import PostEditor from './PostEditor';
+import PostCreator from './PostCreator';
+import If from './If';
 import * as PostActions from '../actions/PostActions';
+import * as PostFormActions from '../actions/PostFormActions';
 
 class PostList extends Component {
-
-    state = {
-        openPostEditorScreen: false,
-        postId: ''
-    };
 
     componentDidMount() {
         this.props.loadPosts();
@@ -28,10 +26,7 @@ class PostList extends Component {
     };
 
     openPostEditor = (postId) => {
-        console.log("Open PostEditor Id: " + postId);
-
-        // this.setState({ openPostEditorScreen: true });
-        // this.setState({ postId });
+        this.props.openPostForm(postId);
     };
 
     getActivePosts() {
@@ -42,50 +37,67 @@ class PostList extends Component {
         return [];
     };
 
-    onModalClosed = () => {
-        this.setState({ openPostEditorScreen: false });
-    };
-
     render() {
-        const { openPostEditorScreen, postId } = this.state;
+        const { postForm } = this.props;
         return (
             <div>
                 <PostListHeader />
-                <List animated verticalAlign='middle'>
+                <Card.Group itemsPerRow={1}>
                     {this.getActivePosts().map((item) => (
-                        <List.Item key={item.id} onClick={() => this.openPostEditor(item.id)}>
-                            <Image avatar src={avatar} />
-                            <List.Content>
-                                <List.Header as='a'>{item.title}</List.Header>
-                                <List.Content>{item.body}</List.Content>
-                                <Moment fromNow>{item.timestamp}</Moment>
-                                <Vote
-                                    itemId={item.id}
-                                    number={item.voteScore}
-                                    upVote={this.handleUpVoteCallback}
-                                    downVote={this.handleDownVoteCallback} />
-                            </List.Content>
-                        </List.Item>
+                        <Card fluid={false} key={item.id}>
+                            <Card.Content>
+                                <Image avatar src={avatar} />
+                                <Card.Header>
+                                    {item.title}
+                                </Card.Header>
+                                <Card.Meta>
+                                    <Moment fromNow>{item.timestamp}</Moment>
+                                </Card.Meta>
+                                <Card.Description>
+                                    {item.body}
+                                </Card.Description>
+                            </Card.Content>
+                            <Card.Content extra>
+                                <div style={{ marginBottom: '10px' }}>
+                                    <Vote
+                                        itemId={item.id}
+                                        number={item.voteScore}
+                                        upVote={this.handleUpVoteCallback}
+                                        downVote={this.handleDownVoteCallback} />
+                                </div>
+                                <div className='ui two buttons'>
+                                    <Button basic color='green'
+                                        onClick={() => this.openPostEditor(item.id)}>Edit</Button>
+                                    <Button basic color='blue'>Details</Button>
+                                </div>
+                            </Card.Content>
+                        </Card>
                     ))}
-                </List>
-                <Modal open={openPostEditorScreen} onClose={this.onModalClosed}>
-                    <PostEditor postId={postId} />
-                </Modal>
+                </Card.Group>
+                <If test={postForm.open && postForm.postId !== undefined}>
+                    <PostEditor />
+                </If>
+                <If test={postForm.open && postForm.postId === undefined}>
+                    <PostCreator />
+                </If>
             </div>
         )
     }
 };
 
 const mapStateToProps = (state) => ({
-    posts: state.posts
+    posts: state.posts,
+    postForm: state.postForm
 });
 
 function mapDispatchToProps(dispatch) {
     return {
+        openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         loadPosts: () => dispatch(PostActions.fetchPosts()),
         removePost: (data) => dispatch(PostActions.deletePost(data)),
         upVote: (data) => dispatch(PostActions.upVotingPost(data)),
         downVote: (data) => dispatch(PostActions.downVotingPost(data))
     }
-}
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);

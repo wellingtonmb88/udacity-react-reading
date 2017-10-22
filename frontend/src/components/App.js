@@ -3,8 +3,6 @@ import logo from '../logo.svg';
 import '../App.css';
 import CategoryList from './CategoryList';
 import PostList from './PostList';
-import PostCreator from './PostCreator';
-import PostDetails from './PostDetails';
 
 class App extends Component {
   render() {
@@ -17,8 +15,6 @@ class App extends Component {
         </header>
         <CategoryList />
         <PostList />
-        <PostCreator />
-        <PostDetails postId={"19"} />
       </div>
     );
   }
