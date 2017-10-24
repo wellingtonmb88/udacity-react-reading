@@ -32,7 +32,7 @@ class CommentEditor extends Component {
                 this.setState({ voteScore: comment.voteScore });
             }
         }
-    }
+    };
 
     handleSubmit = (commentAuthor, commentBody) => {
         const { parentId, voteScore } = this.state
@@ -52,7 +52,7 @@ class CommentEditor extends Component {
 
         updateComment(comment);
         this.onModalClosed();
-    }
+    };
 
     onModalClosed = () => {
         this.props.closeCommentForm();
@@ -70,7 +70,7 @@ class CommentEditor extends Component {
                 </Modal>
             </div>
         )
-    }
+    };
 };
 
 const mapStateToProps = (state) => ({
@@ -83,7 +83,8 @@ function mapDispatchToProps(dispatch) {
         updateComment: (data) => dispatch(CommentActions.editComment(data)),
         closeCommentForm: () => dispatch(CommentFormActions.closeForm())
     }
-}
+};
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps

@@ -25,7 +25,7 @@ class CommentCreator extends Component {
         };
 
         this.props.addComment(comment);
-    }
+    };
 
     render() {
         return (
@@ -34,12 +34,13 @@ class CommentCreator extends Component {
                     handleSubmit={this.handleSubmit} />
             </div>
         )
-    }
+    };
 };
 
 function mapDispatchToProps(dispatch) {
     return {
         addComment: (data) => dispatch(CommentActions.addNewComment(data))
     }
-}
+};
+
 export default connect(null, mapDispatchToProps)(CommentCreator);
