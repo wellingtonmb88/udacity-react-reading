@@ -8,7 +8,8 @@ class CommentForm extends Component {
     state = {
         body: '',
         author: '',
-        date: 0
+        date: 0,
+        disableSubButton: true
     };
 
     static propTypes = {
@@ -24,11 +25,26 @@ class CommentForm extends Component {
             if (comment) {
                 this.setState({ author: comment.author });
                 this.setState({ body: comment.body });
+                this.setState({ disableSubButton: false });
             }
         }
     };
 
-    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+    handleChange = (e, { name, value }) => {
+        this.setState({ [name]: value },
+            () => { this.validateFields() });
+    };
+
+    validateFields = () => {
+        const { author, body } = this.state;
+        console.log("author.length: ", author.length)
+        console.log("body.length: ", body.length)
+        if (author.length > 0 && body.length > 0) {
+            this.setState({ disableSubButton: false });
+        } else if (author.length < 1 || body.length < 1) {
+            this.setState({ disableSubButton: true });
+        }
+    };
 
     handleSubmit = () => {
         const { body, author } = this.state
@@ -52,6 +68,7 @@ class CommentForm extends Component {
                         control={Input}
                         label='Author'
                         name='author'
+                        required={true}
                         value={author}
                         placeholder='Author name'
                         onChange={this.handleChange} />
@@ -61,6 +78,7 @@ class CommentForm extends Component {
                         onChange={this.handleChange} />
                     <Button positive
                         content="Save"
+                        disabled={this.state.disableSubButton}
                         onClick={this.handleSubmit} />
                 </Form>
             </div>
