@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Button, Grid, Segment, Label, Modal } from 'semantic-ui-react';
-import Vote from './Vote';
-import If from './If';
-import Comments from './Comments';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import Moment from 'react-moment';
+import Vote from './Vote';
+import If from './If';
+import Comments from './Comments';
+import PostEditor from './PostEditor';
 import * as PostActions from '../actions/PostActions';
+import * as PostFormActions from '../actions/PostFormActions';
 
 class PostDetails extends Component {
 
@@ -35,8 +37,17 @@ class PostDetails extends Component {
         this.props.goBackToHome();
     };
 
+    openPostEditor = (postId) => {
+        this.props.openPostForm(postId);
+    };
+
+    deletePost = (postId) => {
+        this.props.deletePost(postId);
+        this.props.goBackToHome();
+    };
+
     render() {
-        const { postId } = this.props;
+        const { postId, postForm } = this.props;
         const post = this.getPost();
 
         return (
@@ -44,6 +55,9 @@ class PostDetails extends Component {
                 <div className="details-bar">
                     <a className="close-details" onClick={() => this.onBackPressed()}>Close</a>
                     <p>Post Details</p>
+                    <Button color='blue'
+                        content="Update"
+                        onClick={() => this.openPostEditor(postId)} />
                 </div>
                 <If test={post.id !== undefined}>
                     <div
@@ -59,6 +73,9 @@ class PostDetails extends Component {
                                 <Grid.Column >
                                     <Segment raised>
                                         <Label as='a' color='red' ribbon>Post Details</Label>
+                                        <Button color='red'
+                                            content="Delete"
+                                            onClick={() => this.deletePost(postId)} />
                                         <div>
                                             <Label color='yellow' horizontal>Author</Label> <span>{post.author}</span>
                                         </div>
@@ -101,6 +118,9 @@ class PostDetails extends Component {
                             onClick={this.onModalClosed} />
                     </Modal.Actions>
                 </Modal>
+                <If test={postForm.open && postForm.postId !== undefined}>
+                    <PostEditor />
+                </If>
             </div>
         )
     }
@@ -108,14 +128,17 @@ class PostDetails extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
     posts: state.posts,
-    postId: ownProps.match.params.post_id
+    postId: ownProps.match.params.post_id,
+    postForm: state.postForm
 });
 
 function mapDispatchToProps(dispatch) {
     return {
+        openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         goBackToHome: () => dispatch(routerActions.push('/')),
         upVote: (data) => dispatch(PostActions.upVotingPost(data)),
-        downVote: (data) => dispatch(PostActions.downVotingPost(data))
+        downVote: (data) => dispatch(PostActions.downVotingPost(data)),
+        deletePost: (data) => dispatch(PostActions.deletePost(data))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(PostDetails);

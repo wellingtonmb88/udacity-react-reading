@@ -37,8 +37,6 @@ class CommentForm extends Component {
 
     validateFields = () => {
         const { author, body } = this.state;
-        console.log("author.length: ", author.length)
-        console.log("body.length: ", body.length)
         if (author.length > 0 && body.length > 0) {
             this.setState({ disableSubButton: false });
         } else if (author.length < 1 || body.length < 1) {

@@ -18,11 +18,27 @@ const getArrayIndexByItemId = (array, itemId) => {
     return index;
 };
 
+function sortOn(arr, prop) {
+    arr.sort(
+        function (a, b) {
+            if (a[prop] < b[prop]) {
+                return -1;
+            } else if (a[prop] > b[prop]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    );
+};
+
 export function reducer(state = {}, action) {
     const { comments, comment, commentId } = action
     switch (action.type) {
 
         case LOAD_COMMENTS:
+            sortOn(comments, "voteScore");
+            comments.reverse();
             return {
                 ...state,
                 items: comments
