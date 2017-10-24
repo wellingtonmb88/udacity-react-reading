@@ -9,6 +9,7 @@ import CommentEditor from './CommentEditor';
 import If from './If.js';
 import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
+import * as CommentFormActions from '../actions/CommentFormActions';
 
 class Comments extends Component {
 
@@ -35,8 +36,7 @@ class Comments extends Component {
     };
 
     openCommentEditor = (commentId) => {
-        this.setState({ commentId });
-        this.setState({ showCommentEditor: true })
+        this.props.openCommentForm(commentId);
     }
 
     getActiveComments(comments) {
@@ -58,41 +58,38 @@ class Comments extends Component {
         return (
             <div >
                 {/* <div style={{ display: 'flex', justifyContent: 'center' }}> */}
-                    <Comment.Group threaded>
-                        <Header as='h3' dividing>{commentsList.length} Comments</Header>
-                        {commentsList.map((item) => (
-                            <If test={item.deleted === false} key={item.id}>
-                                <Comment key={item.id}>
-                                    <Comment.Avatar as='a' src={avatar} />
-                                    <Comment.Content>
-                                        <Comment.Author as='a'>{item.author}</Comment.Author>
-                                        <Comment.Metadata>
-                                            <Moment fromNow>{item.timestamp}</Moment>
-                                        </Comment.Metadata>
-                                        <Comment.Text>
-                                            <p>{item.body}</p>
-                                            <Vote
-                                                itemId={item.id}
-                                                number={item.voteScore}
-                                                upVote={this.handleUpVoteCallback}
-                                                downVote={this.handleDownVoteCallback} />
-                                        </Comment.Text>
-                                        <Comment.Actions>
-                                            <a onClick={() => removeComment(item.id)}>Delete</a>
-                                        </Comment.Actions>
-                                        <Comment.Actions>
-                                            <a onClick={() => this.openCommentEditor(item.id)}>Update</a>
-                                        </Comment.Actions>
-                                    </Comment.Content>
-                                </Comment>
-                            </If>
-                        ))}
-                        <CommentCreator postId={postId} />
-                        <If test={this.state.showCommentEditor === true} >
-                            <CommentEditor commentId={this.state.commentId} />
+                <Comment.Group threaded>
+                    <Header as='h3' dividing>{commentsList.length} Comments</Header>
+                    {commentsList.map((item) => (
+                        <If test={item.deleted === false} key={item.id}>
+                            <Comment key={item.id}>
+                                <Comment.Avatar as='a' src={avatar} />
+                                <Comment.Content>
+                                    <Comment.Author as='a'>{item.author}</Comment.Author>
+                                    <Comment.Metadata>
+                                        <Moment fromNow>{item.timestamp}</Moment>
+                                    </Comment.Metadata>
+                                    <Comment.Text>
+                                        <p>{item.body}</p>
+                                        <Vote
+                                            itemId={item.id}
+                                            number={item.voteScore}
+                                            upVote={this.handleUpVoteCallback}
+                                            downVote={this.handleDownVoteCallback} />
+                                    </Comment.Text>
+                                    <Comment.Actions>
+                                        <a onClick={() => removeComment(item.id)}>Delete</a>
+                                    </Comment.Actions>
+                                    <Comment.Actions>
+                                        <a onClick={() => this.openCommentEditor(item.id)}>Update</a>
+                                    </Comment.Actions>
+                                </Comment.Content>
+                            </Comment>
                         </If>
-                    </Comment.Group>
-                {/* </div> */}
+                    ))}
+                    <CommentCreator postId={postId} />
+                    <CommentEditor />
+                </Comment.Group>
             </div>
         )
     }
@@ -104,6 +101,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
+        openCommentForm: (data) => dispatch(CommentFormActions.openForm(data)),
         loadComments: (data) => dispatch(CommentActions.fetchCommentsByPostId(data)),
         removeComment: (data) => dispatch(CommentActions.deleteComment(data)),
         upVote: (data) => dispatch(CommentActions.upVotingComment(data)),

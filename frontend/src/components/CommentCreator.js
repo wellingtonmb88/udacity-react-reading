@@ -31,8 +31,6 @@ class CommentCreator extends Component {
         return (
             <div >
                 <CommentForm
-                    commentAuthor=''
-                    commentBody=''
                     handleSubmit={this.handleSubmit} />
             </div>
         )

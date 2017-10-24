@@ -143,7 +143,7 @@ function mapDispatchToProps(dispatch) {
     return {
         closePostForm: () => dispatch(PostFormActions.closeForm())
     }
-}
+};
 
 export default connect(
     mapStateToProps,

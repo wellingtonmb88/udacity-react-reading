@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
 import { Button, Input, Form } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import * as CommentFormActions from '../actions/CommentFormActions';
 
 class CommentForm extends Component {
     state = {
         body: '',
-        author: ''
+        author: '',
+        date: 0
     };
 
     static propTypes = {
-        commentAuthor: PropTypes.string.isRequired,
-        commentBody: PropTypes.string.isRequired,
         handleSubmit: PropTypes.func.isRequired
     };
 
     componentDidMount() {
-        const { commentBody, commentAuthor } = this.props;
-        this.setState({ body: commentBody })
-        this.setState({ author: commentAuthor })
-    }
+        const { commentForm, comments } = this.props;
+        if (comments.items) {
+            const commentId = commentForm.commentId;
+            const comment = comments.items.filter(item => item.id === commentId)[0];
+
+            if (comment) {
+                this.setState({ author: comment.author });
+                this.setState({ body: comment.body });
+            }
+        }
+    };
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
@@ -26,15 +34,20 @@ class CommentForm extends Component {
         const { body, author } = this.state
         this.props.handleSubmit(author, body);
 
-        this.setState({ body: '' })
-        this.setState({ author: '' })
-    }
+        this.setState({ body: '' });
+        this.setState({ author: '' });
+    };
+
+    onModalClosed = () => {
+        this.props.closeCommentForm();
+    };
 
     render() {
-        const { body, author } = this.state;
+        const { author, body } = this.state;
+
         return (
             <div >
-                <Form reply onSubmit={this.handleSubmit}>
+                <Form reply >
                     <Form.Field
                         control={Input}
                         label='Author'
@@ -46,15 +59,27 @@ class CommentForm extends Component {
                         name='body'
                         value={body}
                         onChange={this.handleChange} />
-                    <Button
-                        content='Add Comment'
-                        labelPosition='left'
-                        icon='edit'
-                        primary />
+                    <Button positive
+                        content="Save"
+                        onClick={this.handleSubmit} />
                 </Form>
             </div>
         )
     }
 };
 
-export default CommentForm;
+const mapStateToProps = (state) => ({
+    comments: state.comments,
+    commentForm: state.commentForm
+});
+
+function mapDispatchToProps(dispatch) {
+    return {
+        closeCommentForm: () => dispatch(CommentFormActions.closeForm())
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CommentForm);

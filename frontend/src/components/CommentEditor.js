@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Modal } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import * as CommentActions from '../actions/CommentActions';
 import CommentForm from './CommentForm';
+import * as CommentActions from '../actions/CommentActions';
+import * as CommentFormActions from '../actions/CommentFormActions';
 
 class CommentEditor extends Component {
 
@@ -17,19 +19,25 @@ class CommentEditor extends Component {
         commentId: PropTypes.string
     };
 
-    componentWillMount() {
-        const { commentId, comments } = this.props;
-        const comment = comments.items.filter(item => item.id === commentId)[0];
+    componentDidMount() {
+        const { comments, commentForm } = this.props;
+        if (comments.items) {
+            const commentId = commentForm.commentId;
+            const comment = comments.items.filter(item => item.id === commentId)[0];
 
-        this.setState({ commentBody: comment.body });
-        this.setState({ commentAuthor: comment.author });
-        this.setState({ parentId: comment.parentId });
-        this.setState({ voteScore: comment.voteScore });
+            if (comment) {
+                this.setState({ author: comment.author });
+                this.setState({ body: comment.body });
+                this.setState({ parentId: comment.parentId });
+                this.setState({ voteScore: comment.voteScore });
+            }
+        }
     }
 
     handleSubmit = (commentAuthor, commentBody) => {
         const { parentId, voteScore } = this.state
-        const { commentId, updateComment } = this.props;
+        const { commentForm, updateComment } = this.props;
+        const commentId = commentForm.commentId;
         const commentTimestamp = Date.now();
 
         const comment = {
@@ -43,28 +51,37 @@ class CommentEditor extends Component {
         };
 
         updateComment(comment);
+        this.onModalClosed();
     }
 
+    onModalClosed = () => {
+        this.props.closeCommentForm();
+    };
+
     render() {
-        const { commentBody, commentAuthor } = this.state;
         return (
             <div >
-                <CommentForm
-                    commentAuthor={commentAuthor}
-                    commentBody={commentBody}
-                    handleSubmit={this.handleSubmit} />
+                <Modal dimmer={'blurring'} open={this.props.commentForm.open} onClose={this.onModalClosed}>
+                    <Modal.Header>Editing Comment</Modal.Header>
+                    <Modal.Content>
+                        <CommentForm
+                            handleSubmit={this.handleSubmit} />
+                    </Modal.Content>
+                </Modal>
             </div>
         )
     }
 };
 
 const mapStateToProps = (state) => ({
-    comments: state.comments
+    comments: state.comments,
+    commentForm: state.commentForm
 });
 
 function mapDispatchToProps(dispatch) {
     return {
-        updateComment: (data) => dispatch(CommentActions.editComment(data))
+        updateComment: (data) => dispatch(CommentActions.editComment(data)),
+        closeCommentForm: () => dispatch(CommentFormActions.closeForm())
     }
 }
 export default connect(

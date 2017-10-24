@@ -4,7 +4,6 @@ import Vote from './Vote';
 import If from './If';
 import Comments from './Comments';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import { routerActions } from 'react-router-redux';
 import Moment from 'react-moment';
 import * as PostActions from '../actions/PostActions';
