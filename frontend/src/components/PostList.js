@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, Card, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { routerActions } from 'react-router-redux';
 import Moment from 'react-moment';
 import avatar from '../assets/images/avatar_placeholder.png';
 import PostListHeader from './PostListHeader';
@@ -68,7 +69,8 @@ class PostList extends Component {
                                 <div className='ui two buttons'>
                                     <Button basic color='green'
                                         onClick={() => this.openPostEditor(item.id)}>Edit</Button>
-                                    <Button basic color='blue'>Details</Button>
+                                    <Button basic color='blue'
+                                        onClick={() => this.props.goToPostDetails(item.id)} >Details</Button>
                                 </div>
                             </Card.Content>
                         </Card>
@@ -92,6 +94,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
+        goToPostDetails: (data) => dispatch(routerActions.push('/postdetails/' + data)),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         loadPosts: () => dispatch(PostActions.fetchPosts()),
         removePost: (data) => dispatch(PostActions.deletePost(data)),

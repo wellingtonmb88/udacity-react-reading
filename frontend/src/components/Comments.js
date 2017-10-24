@@ -57,7 +57,7 @@ class Comments extends Component {
 
         return (
             <div >
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                {/* <div style={{ display: 'flex', justifyContent: 'center' }}> */}
                     <Comment.Group threaded>
                         <Header as='h3' dividing>{commentsList.length} Comments</Header>
                         {commentsList.map((item) => (
@@ -92,7 +92,7 @@ class Comments extends Component {
                             <CommentEditor commentId={this.state.commentId} />
                         </If>
                     </Comment.Group>
-                </div>
+                {/* </div> */}
             </div>
         )
     }
