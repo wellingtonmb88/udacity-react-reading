@@ -135,7 +135,7 @@ const mapStateToProps = (state, ownProps) => ({
 function mapDispatchToProps(dispatch) {
     return {
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
-        goBackToHome: () => dispatch(routerActions.push('/')),
+        goBackToHome: () => dispatch(routerActions.goBack()),
         upVote: (data) => dispatch(PostActions.upVotingPost(data)),
         downVote: (data) => dispatch(PostActions.downVotingPost(data)),
         deletePost: (data) => dispatch(PostActions.deletePost(data))

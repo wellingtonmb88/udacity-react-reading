@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import PostDetails from './components/PostDetails';
+import PostsByCategory from './components/PostsByCategory';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -42,6 +43,7 @@ ReactDOM.render(
             <Switch>
                 <Route exact path="/" component={App} />
                 <Route path="/postdetails/:post_id" component={PostDetails} />
+                <Route path="/postsbycategory/:category" component={PostsByCategory} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

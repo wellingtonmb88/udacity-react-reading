@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { routerActions } from 'react-router-redux';
 import { List } from 'semantic-ui-react';
 import * as CategoryActions from '../actions/CategoryActions';
 
 class CategoryList extends Component {
 
     componentDidMount() {
-        this.props.dispatch(CategoryActions.fetchCategories());
+        this.props.fetchCategories();
     };
 
     render() {
@@ -18,7 +19,8 @@ class CategoryList extends Component {
                     {categories.items !== undefined ? categories.items.map((item) => (
                         <List.Item key={item.name}>
                             <List.Content>
-                                <List.Header as='a'>{item.name}</List.Header>
+                                <List.Header as='a'
+                                    onClick={() => this.props.goToPostListByCategory(item.name)}>{item.name}</List.Header>
                             </List.Content>
                         </List.Item>
                     )) : null}
@@ -32,6 +34,14 @@ const mapStateToProps = (state) => ({
     categories: state.categories
 });
 
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchCategories: () => dispatch(CategoryActions.fetchCategories()),
+        goToPostListByCategory: (data) => dispatch(routerActions.push('/postsbycategory/' + data))
+    }
+};
+
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(CategoryList);
