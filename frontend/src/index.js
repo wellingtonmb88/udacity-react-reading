@@ -42,8 +42,8 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <Switch>
                 <Route exact path="/" component={App} />
-                <Route path="/postdetails/:post_id" component={PostDetails} />
-                <Route path="/postsbycategory/:category" component={PostsByCategory} />
+                <Route path="/:category/:post_id" component={PostDetails} />
+                <Route path="/:category" component={PostsByCategory} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

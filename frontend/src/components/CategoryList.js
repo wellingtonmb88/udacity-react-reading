@@ -37,7 +37,7 @@ const mapStateToProps = (state) => ({
 function mapDispatchToProps(dispatch) {
     return {
         fetchCategories: () => dispatch(CategoryActions.fetchCategories()),
-        goToPostListByCategory: (data) => dispatch(routerActions.push('/postsbycategory/' + data))
+        goToPostListByCategory: (data) => dispatch(routerActions.push('/' + data))
     }
 };
 

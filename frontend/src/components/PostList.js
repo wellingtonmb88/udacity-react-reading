@@ -26,7 +26,7 @@ class PostList extends Component {
         this.props.downVote(postId);
     };
 
-    openPostEditor = (postId) => {
+    openPostEditor = (postId, category) => {
         this.props.openPostForm(postId);
     };
 
@@ -70,7 +70,7 @@ class PostList extends Component {
                                     <Button basic color='green'
                                         onClick={() => this.openPostEditor(item.id)}>Edit</Button>
                                     <Button basic color='blue'
-                                        onClick={() => this.props.goToPostDetails(item.id)} >Details</Button>
+                                        onClick={() => this.props.goToPostDetails(item.id, item.category)} >Details</Button>
                                 </div>
                             </Card.Content>
                         </Card>
@@ -94,7 +94,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        goToPostDetails: (data) => dispatch(routerActions.push('/postdetails/' + data)),
+        goToPostDetails: (postId, category) => dispatch(routerActions.push('/' + category + '/' + postId)),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         loadPosts: () => dispatch(PostActions.fetchPosts()),
         removePost: (data) => dispatch(PostActions.deletePost(data)),
