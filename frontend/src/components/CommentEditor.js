@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import CommentForm from './CommentForm';
 import * as CommentActions from '../actions/CommentActions';
 import * as CommentFormActions from '../actions/CommentFormActions';
@@ -10,48 +9,36 @@ class CommentEditor extends Component {
 
     state = {
         commentBody: '',
-        commentAuthor: '',
-        parentId: '',
-        voteScore: 0
-    };
-
-    static propTypes = {
-        commentId: PropTypes.string
-    };
-
-    componentDidMount() {
-        const { comments, commentForm } = this.props;
-        if (comments.items) {
-            const commentId = commentForm.commentId;
-            const comment = comments.items.filter(item => item.id === commentId)[0];
-
-            if (comment) {
-                this.setState({ author: comment.author });
-                this.setState({ body: comment.body });
-                this.setState({ parentId: comment.parentId });
-                this.setState({ voteScore: comment.voteScore });
-            }
-        }
+        commentAuthor: ''
     };
 
     handleSubmit = (commentAuthor, commentBody) => {
-        const { parentId, voteScore } = this.state
-        const { commentForm, updateComment } = this.props;
+        const { comments, commentForm, updateComment } = this.props;
         const commentId = commentForm.commentId;
+        const comment = this.getComment(comments, commentId);
         const commentTimestamp = Date.now();
 
-        const comment = {
+        const commentObject = {
             id: commentId,
             timestamp: commentTimestamp,
             body: commentBody,
             author: commentAuthor,
-            parentId: parentId,
-            voteScore: voteScore,
+            parentId: comment.parentId,
+            voteScore: comment.voteScore,
             deleted: false
         };
 
-        updateComment(comment);
+        updateComment(commentObject);
         this.onModalClosed();
+    };
+
+    getComment = (comments, commentId) => {
+        if (comments.items) {
+            const comment = comments.items.filter(item => item.id === commentId)[0];
+            if (comment) {
+                return comment;
+            }
+        }
     };
 
     onModalClosed = () => {
@@ -59,12 +46,14 @@ class CommentEditor extends Component {
     };
 
     render() {
+        const { comments, commentForm } = this.props;
         return (
             <div >
-                <Modal dimmer={'blurring'} open={this.props.commentForm.open} onClose={this.onModalClosed}>
+                <Modal dimmer={'blurring'} open={commentForm.open} onClose={this.onModalClosed}>
                     <Modal.Header>Editing Comment</Modal.Header>
                     <Modal.Content>
                         <CommentForm
+                            comment={this.getComment(comments, commentForm.commentId)}
                             handleSubmit={this.handleSubmit} />
                     </Modal.Content>
                 </Modal>

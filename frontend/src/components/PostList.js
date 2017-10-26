@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Image, Card, Button } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import Moment from 'react-moment';
-import avatar from '../assets/images/avatar_placeholder.png';
 import PostListHeader from './PostListHeader';
-import Vote from './Vote';
 import PostEditor from './PostEditor';
 import PostCreator from './PostCreator';
+import PostCard from './PostCard';
 import If from './If';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
@@ -26,8 +24,12 @@ class PostList extends Component {
         this.props.downVote(postId);
     };
 
-    openPostEditor = (postId, category) => {
+    openPostEditor = (postId) => {
         this.props.openPostForm(postId);
+    };
+
+    goToPostDetails = (postId, category) => {
+        this.props.goToPostDetails(postId, category);
     };
 
     getActivePosts() {
@@ -45,35 +47,13 @@ class PostList extends Component {
                 <PostListHeader />
                 <Card.Group itemsPerRow={1}>
                     {this.getActivePosts().map((item) => (
-                        <Card fluid={false} key={item.id}>
-                            <Card.Content>
-                                <Image avatar src={avatar} />
-                                <Card.Header>
-                                    {item.title}
-                                </Card.Header>
-                                <Card.Meta>
-                                    <Moment fromNow>{item.timestamp}</Moment>
-                                </Card.Meta>
-                                <Card.Description>
-                                    {item.body}
-                                </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <div style={{ marginBottom: '10px' }}>
-                                    <Vote
-                                        itemId={item.id}
-                                        number={item.voteScore}
-                                        upVote={this.handleUpVoteCallback}
-                                        downVote={this.handleDownVoteCallback} />
-                                </div>
-                                <div className='ui two buttons'>
-                                    <Button basic color='green'
-                                        onClick={() => this.openPostEditor(item.id)}>Edit</Button>
-                                    <Button basic color='blue'
-                                        onClick={() => this.props.goToPostDetails(item.id, item.category)} >Details</Button>
-                                </div>
-                            </Card.Content>
-                        </Card>
+                        <PostCard
+                            key={item.id}
+                            post={item}
+                            handleUpVoteCallback={this.handleUpVoteCallback}
+                            handleDownVoteCallback={this.handleDownVoteCallback}
+                            openPostEditor={this.openPostEditor}
+                            goToPostDetails={this.goToPostDetails} />
                     ))}
                 </Card.Group>
                 <If test={postForm.open && postForm.postId !== undefined}>

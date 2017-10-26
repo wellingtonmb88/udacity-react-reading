@@ -8,25 +8,20 @@ class CommentForm extends Component {
     state = {
         body: '',
         author: '',
-        date: 0,
         disableSubButton: true
     };
 
     static propTypes = {
+        comment: PropTypes.object,
         handleSubmit: PropTypes.func.isRequired
     };
 
     componentDidMount() {
-        const { commentForm, comments } = this.props;
-        if (comments.items) {
-            const commentId = commentForm.commentId;
-            const comment = comments.items.filter(item => item.id === commentId)[0];
-
-            if (comment) {
-                this.setState({ author: comment.author });
-                this.setState({ body: comment.body });
-                this.setState({ disableSubButton: false });
-            }
+        const { comment } = this.props;
+        if (comment) {
+            this.setState({ author: comment.author });
+            this.setState({ body: comment.body });
+            this.setState({ disableSubButton: false });
         }
     };
 
@@ -50,6 +45,7 @@ class CommentForm extends Component {
 
         this.setState({ body: '' });
         this.setState({ author: '' });
+        this.setState({ disableSubButton: true });
     };
 
     onModalClosed = () => {
@@ -58,7 +54,6 @@ class CommentForm extends Component {
 
     render() {
         const { author, body } = this.state;
-
         return (
             <div >
                 <Form reply >
@@ -66,7 +61,6 @@ class CommentForm extends Component {
                         control={Input}
                         label='Author'
                         name='author'
-                        required={true}
                         value={author}
                         placeholder='Author name'
                         onChange={this.handleChange} />
@@ -84,11 +78,6 @@ class CommentForm extends Component {
     }
 };
 
-const mapStateToProps = (state) => ({
-    comments: state.comments,
-    commentForm: state.commentForm
-});
-
 function mapDispatchToProps(dispatch) {
     return {
         closeCommentForm: () => dispatch(CommentFormActions.closeForm())
@@ -96,6 +85,6 @@ function mapDispatchToProps(dispatch) {
 };
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(CommentForm);

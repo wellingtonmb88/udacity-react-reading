@@ -37,5 +37,6 @@ function mapDispatchToProps(dispatch) {
     return {
         addPost: (data) => dispatch(PostActions.addNewPost(data))
     }
-}
+};
+
 export default connect(null, mapDispatchToProps)(PostCreator);

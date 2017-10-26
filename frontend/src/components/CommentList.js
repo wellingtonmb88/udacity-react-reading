@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Moment from 'react-moment';
 import { Header, Comment } from 'semantic-ui-react';
-import avatar from '../assets/images/avatar_placeholder.png';
-import Vote from './Vote';
 import CommentCreator from './CommentCreator';
 import CommentEditor from './CommentEditor';
+import CommentJS from './Comment';
 import If from './If.js';
 import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
 import * as CommentFormActions from '../actions/CommentFormActions';
 
-class Comments extends Component {
+class CommentList extends Component {
 
     state = {
         showCommentEditor: false,
@@ -57,34 +55,17 @@ class Comments extends Component {
 
         return (
             <div >
-                {/* <div style={{ display: 'flex', justifyContent: 'center' }}> */}
+                <Header as='h3' dividing>{commentsList.length} Comments</Header>
                 <Comment.Group threaded>
-                    <Header as='h3' dividing>{commentsList.length} Comments</Header>
                     {commentsList.map((item) => (
                         <If test={item.deleted === false} key={item.id}>
-                            <Comment key={item.id}>
-                                <Comment.Avatar as='a' src={avatar} />
-                                <Comment.Content>
-                                    <Comment.Author as='a'>{item.author}</Comment.Author>
-                                    <Comment.Metadata>
-                                        <Moment fromNow>{item.timestamp}</Moment>
-                                    </Comment.Metadata>
-                                    <Comment.Text>
-                                        <p>{item.body}</p>
-                                        <Vote
-                                            itemId={item.id}
-                                            number={item.voteScore}
-                                            upVote={this.handleUpVoteCallback}
-                                            downVote={this.handleDownVoteCallback} />
-                                    </Comment.Text>
-                                    <Comment.Actions>
-                                        <a onClick={() => removeComment(item.id)}>Delete</a>
-                                    </Comment.Actions>
-                                    <Comment.Actions>
-                                        <a onClick={() => this.openCommentEditor(item.id)}>Update</a>
-                                    </Comment.Actions>
-                                </Comment.Content>
-                            </Comment>
+                            <CommentJS
+                            comment={item}
+                            handleUpVoteCallback={this.handleUpVoteCallback}
+                            handleDownVoteCallback={this.handleDownVoteCallback}
+                            removeComment={removeComment}
+                            openCommentEditor={this.openCommentEditor}
+                            />
                         </If>
                     ))}
                     <CommentCreator postId={postId} />
@@ -111,4 +92,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Comments);
+)(CommentList);

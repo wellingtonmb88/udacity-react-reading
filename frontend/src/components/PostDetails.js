@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Grid, Segment, Label, Modal } from 'semantic-ui-react';
+import { Button, Grid, Segment, Label } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import Moment from 'react-moment';
 import Vote from './Vote';
 import If from './If';
-import Comments from './Comments';
+import CommentList from './CommentList';
 import PostEditor from './PostEditor';
+import ErrorMsgPostDetails from './ErrorMsgPostDetails';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
 
@@ -94,7 +95,6 @@ class PostDetails extends Component {
                                         <div>
                                             <Label color='blue' horizontal>Category</Label> <span>{post.category}</span>
                                         </div>
-
                                         <Vote
                                             itemId={post.id}
                                             number={post.voteScore}
@@ -104,20 +104,10 @@ class PostDetails extends Component {
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
-                        <Comments postId={postId} />
+                        <CommentList postId={postId} />
                     </div>
                 </If>
-                <Modal dimmer={'blurring'} open={post.id === undefined} onClose={this.onModalClosed}>
-                    <Modal.Header>Errorr!!!!</Modal.Header>
-                    <Modal.Content>
-                        Sorry but it was unabe to load the pos details try again later!
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button color='black'
-                            content="Ok"
-                            onClick={this.onModalClosed} />
-                    </Modal.Actions>
-                </Modal>
+                <ErrorMsgPostDetails postId={post.id} onModalClosed={this.onModalClosed} />
                 <If test={postForm.open && postForm.postId !== undefined}>
                     <PostEditor />
                 </If>
