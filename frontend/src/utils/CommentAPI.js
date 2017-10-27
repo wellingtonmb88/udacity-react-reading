@@ -1,6 +1,5 @@
 import { api, headers } from './UtilsAPI';
 
-
 export const getCommentById = (id) =>
     fetch(`${api}/comments/${id}`, { headers })
         .then(res => res.json())

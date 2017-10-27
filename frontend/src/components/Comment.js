@@ -15,11 +15,19 @@ class Comment extends Component {
         openCommentEditor: PropTypes.func.isRequired
     };
 
+    handleUpVoteCallback = (commentId) => {
+        const { comment } = this.props;
+        this.props.handleUpVoteCallback(comment)
+    };
+
+    handleDownVoteCallback = (commentId) => {
+        const { comment } = this.props;
+        this.props.handleDownVoteCallback(comment)
+    };
+
     render() {
         const {
             comment,
-            handleUpVoteCallback,
-            handleDownVoteCallback,
             removeComment,
             openCommentEditor
          } = this.props;
@@ -39,11 +47,11 @@ class Comment extends Component {
                         <Vote
                             itemId={comment.id}
                             number={comment.voteScore}
-                            upVote={handleUpVoteCallback}
-                            downVote={handleDownVoteCallback} />
+                            upVote={this.handleUpVoteCallback}
+                            downVote={this.handleDownVoteCallback} />
                     </UI.Comment.Text>
                     <UI.Comment.Actions>
-                        <a onClick={() => removeComment(comment.id)}>Delete</a>
+                        <a onClick={() => removeComment(comment)}>Delete</a>
                     </UI.Comment.Actions>
                     <UI.Comment.Actions>
                         <a onClick={() => openCommentEditor(comment.id)}>Update</a>

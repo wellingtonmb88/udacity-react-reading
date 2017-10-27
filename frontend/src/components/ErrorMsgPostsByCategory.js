@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-class ErrorMsgPostDetails extends Component {
+class ErrorMsgPostsByCategory extends Component {
 
     static propTypes = {
         shouldShow: PropTypes.bool.isRequired,
@@ -16,7 +16,7 @@ class ErrorMsgPostDetails extends Component {
                 <Modal dimmer={'blurring'} open={shouldShow} onClose={onModalClosed}>
                     <Modal.Header>Errorr!!!!</Modal.Header>
                     <Modal.Content>
-                        Sorry but it was unable to load the Post's details!
+                        Sorry but it was unable to load the Posts by Category Screen!
                 </Modal.Content>
                     <Modal.Actions>
                         <Button color='black'
@@ -29,4 +29,4 @@ class ErrorMsgPostDetails extends Component {
     }
 };
 
-export default ErrorMsgPostDetails;
+export default ErrorMsgPostsByCategory;

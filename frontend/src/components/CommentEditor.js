@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
 import CommentForm from './CommentForm';
+import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
 import * as CommentFormActions from '../actions/CommentFormActions';
 
@@ -12,10 +13,14 @@ class CommentEditor extends Component {
         commentAuthor: ''
     };
 
+    static propTypes = {
+        postId: PropTypes.string.isRequired
+    };
+
     handleSubmit = (commentAuthor, commentBody) => {
-        const { comments, commentForm, updateComment } = this.props;
+        const { commentForm, updateComment } = this.props;
         const commentId = commentForm.commentId;
-        const comment = this.getComment(comments, commentId);
+        const comment = this.getComment(commentId);
         const commentTimestamp = Date.now();
 
         const commentObject = {
@@ -32,28 +37,37 @@ class CommentEditor extends Component {
         this.onModalClosed();
     };
 
-    getComment = (comments, commentId) => {
-        if (comments.items) {
-            const comment = comments.items.filter(item => item.id === commentId)[0];
+    getComment = (commentId) => {
+        const comments = this.getCommentList();
+        if (comments) {
+            const comment = comments.filter(item => item.id === commentId)[0];
             if (comment) {
                 return comment;
             }
         }
     };
 
+    getCommentList() {
+        const { postId, posts } = this.props;
+        if (posts.items) {
+            return posts.items.filter(post => post.id === postId && post.deleted === false)[0].comments.items;
+        }
+        return [];
+    }
+
     onModalClosed = () => {
         this.props.closeCommentForm();
     };
 
     render() {
-        const { comments, commentForm } = this.props;
+        const { commentForm } = this.props;
         return (
             <div >
                 <Modal dimmer={'blurring'} open={commentForm.open} onClose={this.onModalClosed}>
                     <Modal.Header>Editing Comment</Modal.Header>
                     <Modal.Content>
                         <CommentForm
-                            comment={this.getComment(comments, commentForm.commentId)}
+                            comment={this.getComment(commentForm.commentId)}
                             handleSubmit={this.handleSubmit} />
                     </Modal.Content>
                 </Modal>
@@ -63,7 +77,7 @@ class CommentEditor extends Component {
 };
 
 const mapStateToProps = (state) => ({
-    comments: state.comments,
+    posts: state.posts,
     commentForm: state.commentForm
 });
 

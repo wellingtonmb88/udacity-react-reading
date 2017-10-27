@@ -7,8 +7,17 @@ import {
     UP_VOTE_POST,
     DOWN_VOTE_POST,
     SORT_POSTS_BY_DATE,
-    SORT_POSTS_BY_VOTE
+    SORT_POSTS_BY_VOTE,
+    COMMENTS_BY_POST_ID
 } from '../actions/PostActions';
+
+import {
+    ADD_COMMENT,
+    UPDATE_COMMENT,
+    REMOVE_COMMENT,
+    UP_VOTE_COMMENT,
+    DOWN_VOTE_COMMENT
+} from '../actions/CommentActions';
 
 const getArrayIndexByItemId = (array, itemId) => {
     let index = 0;
@@ -36,7 +45,9 @@ function sortOn(arr, prop) {
 }
 
 export function reducer(state = {}, action) {
-    const { posts, post, postId } = action
+    const { posts, post, postId, comments } = action;
+    const { comment } = action;
+
     switch (action.type) {
 
         case LOAD_POSTS:
@@ -62,6 +73,15 @@ export function reducer(state = {}, action) {
             return {
                 ...state,
                 items: newArray
+            }
+
+        case COMMENTS_BY_POST_ID:
+            const indexComments = getArrayIndexByItemId(state.items, postId);
+            let newArrayComments = [...state.items];
+            newArrayComments[indexComments].comments = { items: comments };
+            return {
+                ...state,
+                items: newArrayComments
             }
 
         case REMOVE_POST:
@@ -118,6 +138,76 @@ export function reducer(state = {}, action) {
                 }
             } else {
                 return state
+            }
+
+        case ADD_COMMENT:
+            const indexParentIdAddComment = getArrayIndexByItemId(state.items, comment.parentId);
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    ...state.items[indexParentIdAddComment].comments = {
+                        items: [
+                            ...state.items[indexParentIdAddComment].comments.items,
+                            comment
+                        ]
+                    }
+                ]
+            }
+
+        case UPDATE_COMMENT:
+            const indexParentIdUpdateComment = getArrayIndexByItemId(state.items, comment.parentId);
+            let commentListUpdate = [...state.items[indexParentIdUpdateComment].comments.items];
+            const indexUpdateComment = getArrayIndexByItemId(commentListUpdate, comment.id);
+
+            let commentUpdate = commentListUpdate[indexUpdateComment];
+            commentUpdate.author = comment.author;
+            commentUpdate.body = comment.body;
+            commentUpdate.timestamp = comment.timestam;
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    ...state.items[indexParentIdUpdateComment].comments.items = commentListUpdate
+                ]
+            }
+
+        case REMOVE_COMMENT:
+            const indexParentIdCommentRemove = getArrayIndexByItemId(state.items, comment.parentId);
+            let commentListRemove = [...state.items[indexParentIdCommentRemove].comments.items];
+            const indexCommentRemove = getArrayIndexByItemId(commentListRemove, comment.id);
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    ...state.items[indexParentIdCommentRemove].comments.items[indexCommentRemove].deleted = true
+                ]
+            }
+
+        case UP_VOTE_COMMENT:
+            const indexParentIdUpVoteComment = getArrayIndexByItemId(state.items, comment.parentId);
+            let commentListUpVoteComment = [...state.items[indexParentIdUpVoteComment].comments.items];
+            const indexUpVoteComment = getArrayIndexByItemId(commentListUpVoteComment, comment.id);
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    ...state.items[indexParentIdUpVoteComment].comments.items[indexUpVoteComment].voteScore =
+                    state.items[indexParentIdUpVoteComment].comments.items[indexUpVoteComment].voteScore + 1
+                ]
+            }
+
+        case DOWN_VOTE_COMMENT:
+            const indexParentIdDownVoteComment = getArrayIndexByItemId(state.items, comment.parentId);
+            let commentListDownVoteComment = [...state.items[indexParentIdDownVoteComment].comments.items];
+            const indexDownVoteComment = getArrayIndexByItemId(commentListDownVoteComment, comment.id);
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    ...state.items[indexParentIdDownVoteComment].comments.items[indexDownVoteComment].voteScore =
+                    state.items[indexParentIdDownVoteComment].comments.items[indexDownVoteComment].voteScore - 1
+                ]
             }
 
         default:

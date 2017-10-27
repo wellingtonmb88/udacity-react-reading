@@ -30,11 +30,11 @@ class PostListHeader extends Component {
         return (
             <div>
                 <Divider />
-                <h1> Posts</h1>
+                <h1>Posts</h1>
                 <Grid columns={2} container divided >
                     <Grid.Row>
                         <Grid.Column>
-                            <Button primary onClick={()=> this.props.openPostForm(undefined)}>Create New Post</Button>
+                            <Button primary onClick={() => this.props.openPostForm(undefined)}>Create New Post</Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown upward search selection
@@ -53,7 +53,6 @@ class PostListHeader extends Component {
 const mapStateToProps = (state) => ({
     posts: state.posts
 });
-
 
 function mapDispatchToProps(dispatch) {
     return {

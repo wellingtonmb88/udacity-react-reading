@@ -20,56 +20,52 @@ class CommentList extends Component {
         postId: PropTypes.string.isRequired
     };
 
-    componentDidMount() {
-        const { postId, loadComments } = this.props;
-        loadComments(postId);
+    handleUpVoteCallback = (comment) => {
+        this.props.upVote(comment)
     };
 
-    handleUpVoteCallback = (commentId) => {
-        this.props.upVote(commentId)
-    };
-
-    handleDownVoteCallback = (commentId) => {
-        this.props.downVote(commentId)
+    handleDownVoteCallback = (comment) => {
+        this.props.downVote(comment)
     };
 
     openCommentEditor = (commentId) => {
         this.props.openCommentForm(commentId);
     }
 
-    getActiveComments(comments) {
-        if (comments.items) {
-            return comments.items.filter(item => item.deleted === false);
+    getCommentList() {
+        const { postId, posts } = this.props;
+        if (posts.items) {
+            return posts.items.filter(post => post.id === postId && post.deleted === false)[0]
+                .comments.items.filter(comment => comment.deleted === false);
         }
         return [];
     }
 
     render() {
         const {
-            comments,
             removeComment,
             postId
         } = this.props;
 
-        const commentsList = this.getActiveComments(comments);
+        const commentsList = this.getCommentList();
 
         return (
             <div >
                 <Header as='h3' dividing>{commentsList.length} Comments</Header>
                 <Comment.Group threaded>
                     {commentsList.map((item) => (
-                        <If test={item.deleted === false} key={item.id}>
+                        <If test={item !== undefined} key={item !== undefined ? item.id : 0}>
                             <CommentJS
-                            comment={item}
-                            handleUpVoteCallback={this.handleUpVoteCallback}
-                            handleDownVoteCallback={this.handleDownVoteCallback}
-                            removeComment={removeComment}
-                            openCommentEditor={this.openCommentEditor}
+                                comment={item}
+                                handleUpVoteCallback={this.handleUpVoteCallback}
+                                handleDownVoteCallback={this.handleDownVoteCallback}
+                                removeComment={removeComment}
+                                openCommentEditor={this.openCommentEditor}
                             />
                         </If>
                     ))}
                     <CommentCreator postId={postId} />
-                    <CommentEditor />
+                    <CommentEditor postId={postId} />
                 </Comment.Group>
             </div>
         )
@@ -77,13 +73,12 @@ class CommentList extends Component {
 };
 
 const mapStateToProps = (state) => ({
-    comments: state.comments
+    posts: state.posts
 });
 
 function mapDispatchToProps(dispatch) {
     return {
         openCommentForm: (data) => dispatch(CommentFormActions.openForm(data)),
-        loadComments: (data) => dispatch(CommentActions.fetchCommentsByPostId(data)),
         removeComment: (data) => dispatch(CommentActions.deleteComment(data)),
         upVote: (data) => dispatch(CommentActions.upVotingComment(data)),
         downVote: (data) => dispatch(CommentActions.downVotingComment(data))

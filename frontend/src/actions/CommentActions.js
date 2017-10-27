@@ -30,24 +30,24 @@ function addComment(comment) {
     }
 };
 
- function removeComment(commentId) {
+ function removeComment(comment) {
     return {
         type: REMOVE_COMMENT,
-        commentId
+        comment
     }
 };
 
- function upVoteComment(commentId) {
+ function upVoteComment(comment) {
     return {
         type: UP_VOTE_COMMENT,
-        commentId
+        comment
     }
 };
 
- function downVoteComment(commentId) {
+ function downVoteComment(comment) {
     return {
         type: DOWN_VOTE_COMMENT,
-        commentId
+        comment
     }
 };
 
@@ -66,17 +66,17 @@ export const editComment = (comment) => dispatch => (
         .then(dispatch(updateComment(comment)))
 );
 
-export const deleteComment = (commentId) => dispatch => (
-    CommentAPI.deleteComment(commentId)
-        .then(dispatch(removeComment(commentId)))
+export const deleteComment = (comment) => dispatch => (
+    CommentAPI.deleteComment(comment.id)
+        .then(dispatch(removeComment(comment)))
 );
 
-export const upVotingComment = (commentId) => dispatch => (
-    CommentAPI.upVoteComment(commentId)
-        .then(dispatch(upVoteComment(commentId)))
+export const upVotingComment = (comment) => dispatch => (
+    CommentAPI.upVoteComment(comment.id)
+        .then(dispatch(upVoteComment(comment)))
 );
 
-export const downVotingComment = (commentId) => dispatch => (
-    CommentAPI.downVoteComment(commentId)
-        .then(dispatch(downVoteComment(commentId)))
+export const downVotingComment = (comment) => dispatch => (
+    CommentAPI.downVoteComment(comment.id)
+        .then(dispatch(downVoteComment(comment)))
 );

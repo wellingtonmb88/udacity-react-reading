@@ -12,6 +12,16 @@ import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
 
 class PostDetails extends Component {
+    state = {
+        showError: false
+    };
+
+    componentDidMount() {
+        const { posts } = this.props;
+        if (posts.items === undefined) {
+            this.setState({ showError: true });
+        }
+    };
 
     getPost() {
         const { posts, postId } = this.props;
@@ -60,7 +70,7 @@ class PostDetails extends Component {
                         content="Update"
                         onClick={() => this.openPostEditor(postId)} />
                 </div>
-                <If test={post.id !== undefined}>
+                <If test={post !== undefined}>
                     <div
                         style={{
                             width: '500px',
@@ -96,8 +106,8 @@ class PostDetails extends Component {
                                             <Label color='blue' horizontal>Category</Label> <span>{post.category}</span>
                                         </div>
                                         <Vote
-                                            itemId={post.id}
-                                            number={post.voteScore}
+                                            itemId={post.id  !== undefined ? post.id : ''}
+                                            number={post.voteScore !== undefined ? post.voteScore : 0}
                                             upVote={this.handleUpVoteCallback}
                                             downVote={this.handleDownVoteCallback} />
                                     </Segment>
@@ -107,7 +117,7 @@ class PostDetails extends Component {
                         <CommentList postId={postId} />
                     </div>
                 </If>
-                <ErrorMsgPostDetails postId={post.id} onModalClosed={this.onModalClosed} />
+                <ErrorMsgPostDetails shouldShow={this.state.showError} onModalClosed={this.onModalClosed} />
                 <If test={postForm.open && postForm.postId !== undefined}>
                     <PostEditor />
                 </If>
@@ -130,5 +140,6 @@ function mapDispatchToProps(dispatch) {
         downVote: (data) => dispatch(PostActions.downVotingPost(data)),
         deletePost: (data) => dispatch(PostActions.deletePost(data))
     }
-}
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(PostDetails);

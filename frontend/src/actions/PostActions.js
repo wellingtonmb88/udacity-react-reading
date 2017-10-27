@@ -10,6 +10,7 @@ export const UP_VOTE_POST = 'UP_VOTE_POST';
 export const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
 export const SORT_POSTS_BY_DATE = 'SORT_POSTS_BY_DATE';
 export const SORT_POSTS_BY_VOTE = 'SORT_POSTS_BY_VOTE';
+export const COMMENTS_BY_POST_ID = 'COMMENTS_BY_POST_ID';
 
 function loadPosts(posts) {
     return {
@@ -73,9 +74,26 @@ export function sortPostsByVote() {
     }
 };
 
+function getCommentsByPostId(comments, postId) {
+    return {
+        type: COMMENTS_BY_POST_ID,
+        comments,
+        postId
+    }
+};
+
+const fetchCommentsByPostId = (postId) => dispatch => (
+    PostAPI.getAllCommentsFromPostId(postId)
+        .then(comments => dispatch(getCommentsByPostId(comments, postId)))
+);
+
 export const fetchPosts = () => dispatch => (
     PostAPI.getAllPosts()
-        .then(posts => dispatch(loadPosts(posts)))
+        .then(posts => {
+            dispatch(loadPosts(posts));
+            return posts;
+        })
+        .then(posts => posts.map(post => dispatch(fetchCommentsByPostId(post.id))))
 );
 
 export const fetchPostsByCategory = (category) => dispatch => (

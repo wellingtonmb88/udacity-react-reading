@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import { Image, Card, Button } from 'semantic-ui-react';
+import { Header, Card, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import Moment from 'react-moment';
-import avatar from '../assets/images/avatar_placeholder.png';
 import PostListHeader from './PostListHeader';
-import Vote from './Vote';
 import PostEditor from './PostEditor';
 import PostCreator from './PostCreator';
 import If from './If';
+import PostCard from './PostCard';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
+import * as Utils from '../utils/Utils';
+import ErrorMsgPostsByCategory from './ErrorMsgPostsByCategory';
 
 class PostsByCategory extends Component {
+
+    state = {
+        showError: false
+    };
+
+    componentDidMount() {
+        const { posts } = this.props;
+        if (posts.items === undefined) {
+            this.setState({ showError: true });
+        }
+    };
 
     handleUpVoteCallback = (postId) => {
         this.props.upVote(postId);
@@ -26,53 +37,54 @@ class PostsByCategory extends Component {
         this.props.openPostForm(postId);
     };
 
+    deletePost = (postId) => {
+        this.props.deletePost(postId);
+    };
+
+    goToPostDetails = (postId, category) => {
+        this.props.goToPostDetails(postId, category);
+    };
+
     getActivePosts() {
         const { posts, category } = this.props;
         if (posts.items !== undefined) {
             return posts.items
-            .filter(item => item.deleted === false && item.category === category);
+                .filter(item => item.deleted === false && item.category === category);
         }
         return [];
     };
 
+    onModalClosed = () => {
+        this.setState({ showError: false });
+        this.props.goBackToHome();
+    };
+
     render() {
-        const { postForm } = this.props;
+        const { postForm, category } = this.props;
+        const activePosts = this.getActivePosts();
         return (
-            <div>
+            <div style={{ textAlign: 'center' }}>
+                <ErrorMsgPostsByCategory shouldShow={this.state.showError} onModalClosed={this.onModalClosed} />
+                <Divider />
+                <Header as='h1' color='blue'>{Utils.capitalize(category)}</Header>
                 <PostListHeader />
-                <Card.Group itemsPerRow={1}>
-                    {this.getActivePosts().map((item) => (
-                        <Card fluid={false} key={item.id}>
-                            <Card.Content>
-                                <Image avatar src={avatar} />
-                                <Card.Header>
-                                    {item.title}
-                                </Card.Header>
-                                <Card.Meta>
-                                    <Moment fromNow>{item.timestamp}</Moment>
-                                </Card.Meta>
-                                <Card.Description>
-                                    {item.body}
-                                </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <div style={{ marginBottom: '10px' }}>
-                                    <Vote
-                                        itemId={item.id}
-                                        number={item.voteScore}
-                                        upVote={this.handleUpVoteCallback}
-                                        downVote={this.handleDownVoteCallback} />
-                                </div>
-                                <div className='ui two buttons'>
-                                    <Button basic color='green'
-                                        onClick={() => this.openPostEditor(item.id)}>Edit</Button>
-                                    <Button basic color='blue'
-                                        onClick={() => this.props.goToPostDetails(item.id)} >Details</Button>
-                                </div>
-                            </Card.Content>
-                        </Card>
-                    ))}
-                </Card.Group>
+                <If test={activePosts.length < 1}>
+                    <Header as='h3' color='red'>No results!</Header>
+                </If>
+                <If test={activePosts.length > 0}>
+                    <Card.Group>
+                        {activePosts.map((item) => (
+                            <PostCard
+                                key={item.id}
+                                post={item}
+                                deletePost={this.deletePost}
+                                handleUpVoteCallback={this.handleUpVoteCallback}
+                                handleDownVoteCallback={this.handleDownVoteCallback}
+                                openPostEditor={this.openPostEditor}
+                                goToPostDetails={this.goToPostDetails} />
+                        ))}
+                    </Card.Group>
+                </If>
                 <If test={postForm.open && postForm.postId !== undefined}>
                     <PostEditor />
                 </If>
@@ -84,7 +96,7 @@ class PostsByCategory extends Component {
     }
 };
 
-const mapStateToProps = (state,ownProps) => ({
+const mapStateToProps = (state, ownProps) => ({
     posts: state.posts,
     postForm: state.postForm,
     category: ownProps.match.params.category,
@@ -93,9 +105,10 @@ const mapStateToProps = (state,ownProps) => ({
 function mapDispatchToProps(dispatch) {
     return {
         goToPostDetails: (data) => dispatch(routerActions.push('/postdetails/' + data)),
+        goBackToHome: () => dispatch(routerActions.goBack()),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         loadPosts: () => dispatch(PostActions.fetchPosts()),
-        removePost: (data) => dispatch(PostActions.deletePost(data)),
+        deletePost: (data) => dispatch(PostActions.deletePost(data)),
         upVote: (data) => dispatch(PostActions.upVotingPost(data)),
         downVote: (data) => dispatch(PostActions.downVotingPost(data))
     }

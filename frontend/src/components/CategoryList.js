@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { List } from 'semantic-ui-react';
 import * as CategoryActions from '../actions/CategoryActions';
+import * as Utils from '../utils/Utils';
 
 class CategoryList extends Component {
 
@@ -20,7 +21,7 @@ class CategoryList extends Component {
                         <List.Item key={item.name}>
                             <List.Content>
                                 <List.Header as='a'
-                                    onClick={() => this.props.goToPostListByCategory(item.name)}>{item.name}</List.Header>
+                                    onClick={() => this.props.goToPostListByCategory(item.name)}>{Utils.capitalize(item.name)}</List.Header>
                             </List.Content>
                         </List.Item>
                     )) : null}
