@@ -33,30 +33,32 @@ class Comment extends Component {
          } = this.props;
 
         return (
-            <div >
-                <UI.Comment key={comment.id}>
-                    <UI.Comment.Avatar as='a' src={avatar} />
-                    <UI.Comment.Content>
-                        <UI.Comment.Author as='a'>{comment.author}</UI.Comment.Author>
-                        <UI.Comment.Metadata>
-                            <Moment fromNow>{comment.timestamp}</Moment>
-                        </UI.Comment.Metadata>
-                    </UI.Comment.Content>
-                    <UI.Comment.Text>
-                        <p>{comment.body}</p>
-                        <Vote
-                            itemId={comment.id}
-                            number={comment.voteScore}
-                            upVote={this.handleUpVoteCallback}
-                            downVote={this.handleDownVoteCallback} />
-                    </UI.Comment.Text>
-                    <UI.Comment.Actions>
-                        <a onClick={() => removeComment(comment)}>Delete</a>
-                    </UI.Comment.Actions>
-                    <UI.Comment.Actions>
-                        <a onClick={() => openCommentEditor(comment.id)}>Update</a>
-                    </UI.Comment.Actions>
-                </UI.Comment>
+            <div style={{ marginBottom: '10px' }}>
+                <UI.Segment>
+                    <UI.Comment key={comment.id}>
+                        <UI.Comment.Avatar as='a' src={avatar} />
+                        <UI.Comment.Content>
+                            <UI.Comment.Author as='a'>{comment.author}</UI.Comment.Author>
+                            <UI.Comment.Metadata>
+                                <Moment fromNow>{comment.timestamp}</Moment>
+                            </UI.Comment.Metadata>
+                        </UI.Comment.Content>
+                        <UI.Comment.Text>
+                            <p>{comment.body}</p>
+                            <Vote
+                                itemId={comment.id}
+                                number={comment.voteScore}
+                                upVote={this.handleUpVoteCallback}
+                                downVote={this.handleDownVoteCallback} />
+                        </UI.Comment.Text>
+                        <UI.Comment.Actions>
+                            <a onClick={() => removeComment(comment)}>Delete</a>
+                            <a onClick={() => openCommentEditor(comment.id)}>Update</a>
+                        </UI.Comment.Actions>
+                        <UI.Comment.Actions>
+                        </UI.Comment.Actions>
+                    </UI.Comment>
+                </UI.Segment>
             </div>
         )
     };

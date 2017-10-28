@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Grid, Segment, Label } from 'semantic-ui-react';
+import { Header, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import Moment from 'react-moment';
-import Vote from './Vote';
 import If from './If';
+import PostGrid from './PostGrid';
 import CommentList from './CommentList';
 import PostEditor from './PostEditor';
 import ErrorMsgPostDetails from './ErrorMsgPostDetails';
@@ -40,10 +39,6 @@ class PostDetails extends Component {
         this.props.downVote(postId);
     };
 
-    onBackPressed = () => {
-        this.props.goBackToHome();
-    };
-
     onModalClosed = () => {
         this.props.goBackToHome();
     };
@@ -63,59 +58,19 @@ class PostDetails extends Component {
 
         return (
             <div>
-                <div className="details-bar">
-                    <a className="close-details" onClick={() => this.onBackPressed()}>Close</a>
-                    <p>Post Details</p>
-                    <Button color='blue'
-                        content="Update"
-                        onClick={() => this.openPostEditor(postId)} />
-                </div>
+                <Segment>
+                    <Header as='h3' textAlign='center' color='teal'>
+                        Post Details
+                    </Header>
+                </Segment>
                 <If test={post !== undefined}>
-                    <div
-                        style={{
-                            width: '500px',
-                            height: '500px',
-                            marginTop: '10%',
-                            marginLeft: 'auto',
-                            marginRight: 'auto'
-                        }}>
-                        <Grid  >
-                            <Grid.Row>
-                                <Grid.Column >
-                                    <Segment raised>
-                                        <Label as='a' color='red' ribbon>Post Details</Label>
-                                        <Button color='red'
-                                            content="Delete"
-                                            onClick={() => this.deletePost(postId)} />
-                                        <div>
-                                            <Label color='yellow' horizontal>Author</Label> <span>{post.author}</span>
-                                        </div>
-                                        <div>
-                                            <Label color='red' horizontal>Title</Label> <span>{post.title}</span>
-                                        </div>
-
-                                        <div>
-                                            <Label color='green' horizontal>Body</Label> <span>{post.body}</span>
-                                        </div>
-
-                                        <div>
-                                            <Label color='green' horizontal>Date</Label> <Moment fromNow>{post.timestamp}</Moment>
-                                        </div>
-
-                                        <div>
-                                            <Label color='blue' horizontal>Category</Label> <span>{post.category}</span>
-                                        </div>
-                                        <Vote
-                                            itemId={post.id  !== undefined ? post.id : ''}
-                                            number={post.voteScore !== undefined ? post.voteScore : 0}
-                                            upVote={this.handleUpVoteCallback}
-                                            downVote={this.handleDownVoteCallback} />
-                                    </Segment>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                        <CommentList postId={postId} />
-                    </div>
+                    <PostGrid
+                        post={post}
+                        deletePost={this.deletePost}
+                        openPostEditor={this.openPostEditor}
+                        handleUpVoteCallback={this.handleUpVoteCallback}
+                        handleDownVoteCallback={this.handleDownVoteCallback} />
+                    <CommentList postId={postId} />
                 </If>
                 <ErrorMsgPostDetails shouldShow={this.state.showError} onModalClosed={this.onModalClosed} />
                 <If test={postForm.open && postForm.postId !== undefined}>

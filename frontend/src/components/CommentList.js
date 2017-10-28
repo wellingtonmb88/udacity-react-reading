@@ -30,16 +30,20 @@ class CommentList extends Component {
 
     openCommentEditor = (commentId) => {
         this.props.openCommentForm(commentId);
-    }
+    };
 
     getCommentList() {
         const { postId, posts } = this.props;
         if (posts.items) {
-            return posts.items.filter(post => post.id === postId && post.deleted === false)[0]
-                .comments.items.filter(comment => comment.deleted === false);
+            const post = posts.items.filter(post => post.id === postId && post.deleted === false)[0];
+            if (post) {
+                if (post.comments) {
+                    return post.comments.items.filter(comment => comment.deleted === false);
+                }
+            }
         }
         return [];
-    }
+    };
 
     render() {
         const {
@@ -50,7 +54,13 @@ class CommentList extends Component {
         const commentsList = this.getCommentList();
 
         return (
-            <div >
+            <div
+                style={{
+                    width: '500px',
+                    marginBottom: '30px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto'
+                }}>
                 <Header as='h3' dividing>{commentsList.length} Comments</Header>
                 <Comment.Group threaded>
                     {commentsList.map((item) => (
@@ -83,7 +93,8 @@ function mapDispatchToProps(dispatch) {
         upVote: (data) => dispatch(CommentActions.upVotingComment(data)),
         downVote: (data) => dispatch(CommentActions.downVotingComment(data))
     }
-}
+};
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps

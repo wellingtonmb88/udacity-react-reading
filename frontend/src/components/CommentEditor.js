@@ -50,7 +50,12 @@ class CommentEditor extends Component {
     getCommentList() {
         const { postId, posts } = this.props;
         if (posts.items) {
-            return posts.items.filter(post => post.id === postId && post.deleted === false)[0].comments.items;
+            const post = posts.items.filter(post => post.id === postId && post.deleted === false)[0];
+            if (post) {
+                if (post.comments) {
+                    return post.comments.items.filter(comment => comment.deleted === false);
+                }
+            }
         }
         return [];
     }

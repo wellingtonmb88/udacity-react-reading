@@ -65,7 +65,7 @@ class PostCard extends Component {
                                 <Button basic color='green'
                                     onClick={() => openPostEditor(post.id)}>Edit</Button>
                                 <Button basic color='red'
-                                    onClick={() => deletePost(post.id)} >Delte</Button>
+                                    onClick={() => deletePost(post.id)} >Delete</Button>
                                 <Button basic color='blue'
                                     onClick={() => goToPostDetails(post.id, post.category)} >Details</Button>
                             </div>

@@ -163,12 +163,14 @@ export function reducer(state = {}, action) {
             let commentUpdate = commentListUpdate[indexUpdateComment];
             commentUpdate.author = comment.author;
             commentUpdate.body = comment.body;
-            commentUpdate.timestamp = comment.timestam;
+            commentUpdate.timestamp = comment.timestamp;
             return {
                 ...state,
                 items: [
                     ...state.items,
-                    ...state.items[indexParentIdUpdateComment].comments.items = commentListUpdate
+                    ...state.items[indexParentIdUpdateComment].comments = {
+                        items: commentListUpdate
+                    }
                 ]
             }
 
