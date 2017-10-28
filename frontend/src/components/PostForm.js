@@ -15,7 +15,8 @@ class PostForm extends Component {
         title: '',
         category: 'Category',
         date: '',
-        options: []
+        options: [],
+        disableSubButton: true
     };
 
     static propTypes = {
@@ -55,12 +56,28 @@ class PostForm extends Component {
         }
     };
 
-    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+    handleChange = (e, { name, value }) => {
+        this.setState({ [name]: value },
+            () => { this.validateFields() });
+    };
 
     handleSelectChange = (e, { value }) => {
         const { categories } = this.props;
         const categorySelected = categories.items.filter(item => item.name === value)[0];
         this.setState({ category: categorySelected.name });
+        this.setState({ category: categorySelected.name },
+            () => { this.validateFields() });
+    };
+
+    validateFields = () => {
+        const { author, body, title, category } = this.state;
+        if (author.length > 0 && title.length > 0
+            && body.length > 0 && category !== 'Category') {
+            this.setState({ disableSubButton: false });
+        } else if (author.length < 1 || title.length < 1
+            || body.length < 1 || category === 'Category') {
+            this.setState({ disableSubButton: true });
+        }
     };
 
     handleSubmit = () => {
@@ -126,6 +143,7 @@ class PostForm extends Component {
                                 onClick={this.onModalClosed} />
                             <Button positive
                                 content="Save"
+                                disabled={this.state.disableSubButton}
                                 onClick={this.handleSubmit} />
                         </Modal.Actions>
                     </Modal>
