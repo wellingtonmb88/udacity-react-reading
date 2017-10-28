@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import { List } from 'semantic-ui-react';
+import { Loader, List } from 'semantic-ui-react';
 import * as CategoryActions from '../actions/CategoryActions';
 import * as Utils from '../utils/Utils';
-
 class CategoryList extends Component {
 
     componentDidMount() {
@@ -16,6 +15,7 @@ class CategoryList extends Component {
         return (
             <div>
                 <h1>Categories</h1>
+                <Loader active={categories.items === undefined} size='medium' inline='centered' />
                 <List horizontal relaxed>
                     {categories.items !== undefined ? categories.items.map((item) => (
                         <List.Item key={item.name}>

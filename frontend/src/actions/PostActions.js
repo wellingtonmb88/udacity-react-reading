@@ -1,5 +1,6 @@
 
 import * as PostAPI from '../utils/PostAPI';
+import * as ServerErrorActions from '../actions/ServerErrorActions';
 
 export const LOAD_POSTS = 'LOAD_POSTS';
 export const LOAD_POSTS_BY_CATEGORY = 'LOAD_POSTS_BY_CATEGORY';
@@ -94,6 +95,7 @@ export const fetchPosts = () => dispatch => (
             return posts;
         })
         .then(posts => posts.map(post => dispatch(fetchCommentsByPostId(post.id))))
+        .catch(error => dispatch(ServerErrorActions.showError()))
 );
 
 export const fetchPostsByCategory = (category) => dispatch => (

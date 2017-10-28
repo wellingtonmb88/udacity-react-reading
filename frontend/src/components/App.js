@@ -3,6 +3,7 @@ import logo from '../logo.svg';
 import '../App.css';
 import CategoryList from './CategoryList';
 import PostList from './PostList';
+import ServerErrorMessage from './ServerErrorMessage';
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
           <h1>Welcome to Readings</h1>
           <p>The place where you can read and post comments.</p>
         </header>
+        <ServerErrorMessage />
         <CategoryList />
         <PostList />
       </div>
