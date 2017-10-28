@@ -5,6 +5,7 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import If from './If';
 import * as PostFormActions from '../actions/PostFormActions';
+import * as Utils from '../utils/Utils';
 
 class PostForm extends Component {
 
@@ -45,7 +46,8 @@ class PostForm extends Component {
             let options = [];
             let index = 1;
             categoryList.forEach(category => {
-                options.push({ key: index, text: category.name, value: category.name });
+                const categoryCapitalized = Utils.capitalize(category.name)
+                options.push({ key: index, text: categoryCapitalized, value: category.name });
                 index++;
             });
 
@@ -107,7 +109,7 @@ class PostForm extends Component {
                                 </Form.Group>
                                 <Form.Select
                                     options={options}
-                                    placeholder={category}
+                                    placeholder={Utils.capitalize(category)}
                                     error={false}
                                     onChange={this.handleSelectChange} />
                                 <Form.TextArea
