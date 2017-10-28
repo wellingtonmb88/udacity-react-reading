@@ -6,9 +6,12 @@ import If from './If';
 import PostGrid from './PostGrid';
 import CommentList from './CommentList';
 import PostEditor from './PostEditor';
-import ErrorMsgPostDetails from './ErrorMsgPostDetails';
+import ErrorMessage from './ErrorMessage';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
+
+const errorHeader = "Error loading";
+const errorMessage = "Sorry but it was unable to load the Post's details screen!";
 
 class PostDetails extends Component {
     state = {
@@ -72,7 +75,11 @@ class PostDetails extends Component {
                         handleDownVoteCallback={this.handleDownVoteCallback} />
                     <CommentList postId={postId} />
                 </If>
-                <ErrorMsgPostDetails shouldShow={this.state.showError} onModalClosed={this.onModalClosed} />
+                <ErrorMessage
+                    shouldShow={this.state.showError}
+                    header={errorHeader}
+                    message={errorMessage}
+                    onModalClosed={this.onModalClosed} />
                 <If test={postForm.open && postForm.postId !== undefined}>
                     <PostEditor />
                 </If>

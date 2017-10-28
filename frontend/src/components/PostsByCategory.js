@@ -10,7 +10,10 @@ import PostCard from './PostCard';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
 import * as Utils from '../utils/Utils';
-import ErrorMsgPostsByCategory from './ErrorMsgPostsByCategory';
+import ErrorMessage from './ErrorMessage';
+
+const errorHeader = "Error loading";
+const errorMessage = "Sorry but it was unable to load the Posts by Category screen!";
 
 class PostsByCategory extends Component {
 
@@ -64,7 +67,11 @@ class PostsByCategory extends Component {
         const activePosts = this.getActivePosts();
         return (
             <div style={{ textAlign: 'center' }}>
-                <ErrorMsgPostsByCategory shouldShow={this.state.showError} onModalClosed={this.onModalClosed} />
+                <ErrorMessage
+                    shouldShow={this.state.showError}
+                    header={errorHeader}
+                    message={errorMessage}
+                    onModalClosed={this.onModalClosed} />
                 <Divider />
                 <Header as='h1' color='blue'>{Utils.capitalize(category)}</Header>
                 <PostListHeader />

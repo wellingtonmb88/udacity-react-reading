@@ -2,22 +2,24 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-class ErrorMsgPostsByCategory extends Component {
+class ErrorMessage extends Component {
 
     static propTypes = {
         shouldShow: PropTypes.bool.isRequired,
+        header: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
         onModalClosed: PropTypes.func.isRequired
     };
 
     render() {
-        const { shouldShow, onModalClosed } = this.props;
+        const { shouldShow, header, message, onModalClosed } = this.props;
         return (
             <div >
                 <Modal dimmer={'blurring'} open={shouldShow} onClose={onModalClosed}>
-                    <Modal.Header>Errorr!!!!</Modal.Header>
+                    <Modal.Header>{header}</Modal.Header>
                     <Modal.Content>
-                        Sorry but it was unable to load the Posts by Category Screen!
-                </Modal.Content>
+                        {message}
+                    </Modal.Content>
                     <Modal.Actions>
                         <Button color='black'
                             content="Ok"
@@ -29,4 +31,4 @@ class ErrorMsgPostsByCategory extends Component {
     }
 };
 
-export default ErrorMsgPostsByCategory;
+export default ErrorMessage;
