@@ -1,4 +1,3 @@
-
 import { api, headers } from './UtilsAPI';
 
 export const getAllCategories = () =>
