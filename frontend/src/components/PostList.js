@@ -11,7 +11,7 @@ import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
 import * as CommentActions from '../actions/CommentActions';
 
-class PostList extends Component {
+export class PostList extends Component {
 
     componentDidMount() {
         this.props.loadPosts();

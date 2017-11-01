@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
 import * as CommentFormActions from '../actions/CommentFormActions';
 
-class CommentEditor extends Component {
+export class CommentEditor extends Component {
 
     state = {
         commentBody: '',
@@ -49,7 +49,7 @@ class CommentEditor extends Component {
 
     getCommentList() {
         const { postId, posts } = this.props;
-        if (posts.items) {
+        if (posts !== undefined && posts.items) {
             const post = posts.items.filter(post => post.id === postId && post.deleted === false)[0];
             if (post) {
                 if (post.comments) {
@@ -68,11 +68,11 @@ class CommentEditor extends Component {
         const { commentForm } = this.props;
         return (
             <div >
-                <Modal dimmer={'blurring'} open={commentForm.open} onClose={this.onModalClosed}>
+                <Modal dimmer={'blurring'} open={commentForm !== undefined ? commentForm.open : false} onClose={this.onModalClosed}>
                     <Modal.Header>Editing Comment</Modal.Header>
                     <Modal.Content>
                         <CommentForm
-                            comment={this.getComment(commentForm.commentId)}
+                            comment={this.getComment(commentForm !== undefined ? commentForm.commentId : '')}
                             handleSubmit={this.handleSubmit} />
                     </Modal.Content>
                 </Modal>

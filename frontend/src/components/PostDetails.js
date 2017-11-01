@@ -13,7 +13,7 @@ import * as PostFormActions from '../actions/PostFormActions';
 const errorHeader = "Error loading";
 const errorMessage = "Sorry but it was unable to load the Post's details screen!";
 
-class PostDetails extends Component {
+export class PostDetails extends Component {
     state = {
         showError: false
     };

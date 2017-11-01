@@ -15,7 +15,7 @@ import ErrorMessage from './ErrorMessage';
 const errorHeader = "Error loading";
 const errorMessage = "Sorry but it was unable to load the Posts by Category screen!";
 
-class PostsByCategory extends Component {
+export class PostsByCategory extends Component {
 
     state = {
         showError: false

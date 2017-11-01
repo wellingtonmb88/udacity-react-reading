@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as PostActions from '../actions/PostActions';
 import PostForm from './PostForm';
 
-class PostEditor extends Component {
+export class PostEditor extends Component {
 
     handleSubmit = (postAuthor, postTitle, postBody, postCategory) => {
         const { updatePost, posts, postForm } = this.props;

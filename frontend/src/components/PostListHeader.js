@@ -12,14 +12,12 @@ const options = [
     { key: 2, text: CREATION_DATE, value: 2 }
 ];
 
-class PostListHeader extends Component {
+export class PostListHeader extends Component {
 
-    handleSelectChange = (e, { value }) => {
+    handleSelectChange = (event, { value }) => {
         const { sortPostsByVote, sortPostsByDate } = this.props;
-
-        const orderSelected = options.filter(item => item.value === value)[0].text;
-
-        if (orderSelected === VOTE_SCORE) {
+        const orderSelected = options.filter(item => item.value === value)[0];
+        if (orderSelected.text === VOTE_SCORE) {
             sortPostsByVote();
         } else {
             sortPostsByDate();
@@ -50,10 +48,6 @@ class PostListHeader extends Component {
     }
 };
 
-const mapStateToProps = (state) => ({
-    posts: state.posts
-});
-
 function mapDispatchToProps(dispatch) {
     return {
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
@@ -62,4 +56,4 @@ function mapDispatchToProps(dispatch) {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostListHeader);
+export default connect(null, mapDispatchToProps)(PostListHeader);

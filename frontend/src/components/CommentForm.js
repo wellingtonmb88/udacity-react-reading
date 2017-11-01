@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Input, Form } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { Button, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import * as CommentFormActions from '../actions/CommentFormActions';
 
 class CommentForm extends Component {
     state = {
@@ -25,13 +23,19 @@ class CommentForm extends Component {
         }
     };
 
-    handleChange = (e, { name, value }) => {
+    handleChange = (event) => {
+        const value = event.target.value;
+        const name = event.target.name;
         this.setState({ [name]: value },
             () => { this.validateFields() });
-    };
+    }
 
     validateFields = () => {
         const { author, body } = this.state;
+        if (body === undefined || author === undefined) {
+            this.setState({ disableSubButton: true });
+            return;
+        }
         if (author.length > 0 && body.length > 0) {
             this.setState({ disableSubButton: false });
         } else if (author.length < 1 || body.length < 1) {
@@ -48,17 +52,12 @@ class CommentForm extends Component {
         this.setState({ disableSubButton: true });
     };
 
-    onModalClosed = () => {
-        this.props.closeCommentForm();
-    };
-
     render() {
         const { author, body } = this.state;
         return (
             <div >
                 <Form reply >
-                    <Form.Field
-                        control={Input}
+                    <Form.Input
                         label='Author'
                         name='author'
                         value={author}
@@ -78,13 +77,4 @@ class CommentForm extends Component {
     }
 };
 
-function mapDispatchToProps(dispatch) {
-    return {
-        closeCommentForm: () => dispatch(CommentFormActions.closeForm())
-    }
-};
-
-export default connect(
-    null,
-    mapDispatchToProps
-)(CommentForm);
+export default CommentForm;

@@ -4,7 +4,8 @@ import { routerActions } from 'react-router-redux';
 import { Loader, List } from 'semantic-ui-react';
 import * as CategoryActions from '../actions/CategoryActions';
 import * as Utils from '../utils/Utils';
-class CategoryList extends Component {
+
+export class CategoryList extends Component {
 
     componentDidMount() {
         this.props.fetchCategories();

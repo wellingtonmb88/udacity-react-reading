@@ -7,7 +7,7 @@ import If from './If';
 import * as PostFormActions from '../actions/PostFormActions';
 import * as Utils from '../utils/Utils';
 
-class PostForm extends Component {
+export class PostForm extends Component {
 
     state = {
         body: '',
@@ -25,11 +25,13 @@ class PostForm extends Component {
 
     componentDidMount() {
         const { postForm, posts, categories } = this.props;
-        const postId = postForm.postId;
+        const postId = postForm !== undefined ? postForm.postId : '';
 
-        this.createOptionsForDropDown(categories.items);
+        if (categories) {
+            this.createOptionsForDropDown(categories.items);
+        }
 
-        if (posts.items) {
+        if (posts !== undefined && posts.items) {
             const post = posts.items.filter(item => item.id === postId)[0];
 
             if (post) {
@@ -56,10 +58,12 @@ class PostForm extends Component {
         }
     };
 
-    handleChange = (e, { name, value }) => {
+    handleChange = (event) => {
+        const value = event.target.value;
+        const name = event.target.name;
         this.setState({ [name]: value },
             () => { this.validateFields() });
-    };
+    }
 
     handleSelectChange = (e, { value }) => {
         const { categories } = this.props;
@@ -71,6 +75,11 @@ class PostForm extends Component {
 
     validateFields = () => {
         const { author, body, title, category } = this.state;
+        if (body === undefined || title === undefined
+            || author === undefined) {
+            this.setState({ disableSubButton: true });
+            return;
+        }
         if (author.length > 0 && title.length > 0
             && body.length > 0 && category !== 'Category') {
             this.setState({ disableSubButton: false });
@@ -98,10 +107,11 @@ class PostForm extends Component {
 
     render() {
         const { date, author, title, body, category, options } = this.state;
+        const { postForm } = this.props;
         return (
             <div>
                 <div style={{ justifyContent: 'center' }}>
-                    <Modal dimmer={'blurring'} open={this.props.postForm.open} onClose={this.onModalClosed}>
+                    <Modal dimmer={'blurring'} open={postForm !== undefined ? postForm.open : false} onClose={this.onModalClosed}>
                         <If test={date > 0}>
                             <Modal.Header>Editing Post | Created at: <Moment fromNow>{date}</Moment> </Modal.Header>
                         </If>

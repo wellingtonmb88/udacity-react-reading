@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
 
-class ServerErrorMessage extends Component {
+export class ServerErrorMessage extends Component {
 
     render() {
         return (

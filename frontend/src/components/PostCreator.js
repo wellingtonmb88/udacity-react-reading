@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as PostActions from '../actions/PostActions';
 import PostForm from './PostForm';
 
-class PostCreator extends Component {
+export class PostCreator extends Component {
 
     handleSubmit = (postAuthor, postTitle, postBody, postCategory) => {
         const postId = Math.random().toString(36).substr(-8);

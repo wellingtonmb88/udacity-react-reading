@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Header, Comment } from 'semantic-ui-react';
 import CommentCreator from './CommentCreator';
-import CommentEditor from './CommentEditor';
+import CommentEditor  from './CommentEditor';
 import CommentJS from './Comment';
 import If from './If.js';
 import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
 import * as CommentFormActions from '../actions/CommentFormActions';
 
-class CommentList extends Component {
+export class CommentList extends Component {
 
     state = {
         showCommentEditor: false,
@@ -34,7 +34,7 @@ class CommentList extends Component {
 
     getCommentList() {
         const { postId, posts } = this.props;
-        if (posts.items) {
+        if (posts !== undefined && posts.items) {
             const post = posts.items.filter(post => post.id === postId && post.deleted === false)[0];
             if (post) {
                 if (post.comments) {

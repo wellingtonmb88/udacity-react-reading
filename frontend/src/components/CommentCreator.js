@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as CommentActions from '../actions/CommentActions';
 import CommentForm from './CommentForm';
 
-class CommentCreator extends Component {
+export class CommentCreator extends Component {
 
     static propTypes = {
         postId: PropTypes.string.isRequired
