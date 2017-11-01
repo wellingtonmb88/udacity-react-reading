@@ -1,10 +1,10 @@
-udacity-react-reading
+# udacity-react-reading
 
-Project overview
+## Project overview
 
 For the Reading project, I built a web application for content and comments. My app allow users to post content in pre-defined categories, comment on their own posts and those of other users, and vote on posts and comments. Users can edit and delete posts and comments.
 
-TL;DR
+## TL;DR
 
 To get started:
 - Server
