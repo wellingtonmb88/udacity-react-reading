@@ -53,6 +53,9 @@ class PostCard extends Component {
                                         <h4>Comments: {numComments}</h4>
                                     </If>
                                 </div>
+                                <div>
+                                    Created by: <strong>{post.author}</strong>
+                                </div>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
