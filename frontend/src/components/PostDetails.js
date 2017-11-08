@@ -7,6 +7,7 @@ import PostGrid from './PostGrid';
 import CommentList from './CommentList';
 import PostEditor from './PostEditor';
 import ErrorMessage from './ErrorMessage';
+import MenuComponent from './MenuComponent';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
 
@@ -19,14 +20,12 @@ export class PostDetails extends Component {
     };
 
     componentDidMount() {
-        const { posts, postId, getPostById } = this.props;
-        if (posts.items === undefined) {
-            getPostById(postId).then( data => {
-                if(data.postId === undefined){
-                    this.setState({ showError: true });
-                }
-            });
-        }
+        const { postId, getPostById } = this.props;
+        getPostById(postId).then(data => {
+            if (data.postId === undefined) {
+                this.setState({ showError: true });
+            }
+        });
     };
 
     getPost() {
@@ -61,12 +60,25 @@ export class PostDetails extends Component {
         this.props.goBackToHome();
     };
 
+    goBackToCategory = (category) => {
+        this.props.goToCategory(category);
+    };
+
+    goBackToHome = () => {
+        this.props.goBackToHome();
+    };
+
     render() {
         const { postId, postForm } = this.props;
         const post = this.getPost();
 
         return (
             <div>
+                <MenuComponent
+                    category={post.category}
+                    handleGoBackToHome={this.goBackToHome}
+                    handleGoBackToCategory={this.goBackToCategory}
+                />
                 <Segment>
                     <Header as='h3' textAlign='center' color='teal'>
                         Post Details
@@ -104,7 +116,8 @@ function mapDispatchToProps(dispatch) {
     return {
         getPostById: (data) => dispatch(PostActions.fetchPostById(data)),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
-        goBackToHome: () => dispatch(routerActions.goBack()),
+        goBackToHome: () => dispatch(routerActions.push('/')),
+        goToCategory: (category) => dispatch(routerActions.push('/' + category)),
         upVote: (data) => dispatch(PostActions.upVotingPost(data)),
         downVote: (data) => dispatch(PostActions.downVotingPost(data)),
         deletePost: (data) => dispatch(PostActions.deletePost(data))

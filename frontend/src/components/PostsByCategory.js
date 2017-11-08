@@ -6,6 +6,7 @@ import PostListHeader from './PostListHeader';
 import PostEditor from './PostEditor';
 import PostCreator from './PostCreator';
 import If from './If';
+import MenuComponent from './MenuComponent';
 import PostCard from './PostCard';
 import * as PostActions from '../actions/PostActions';
 import * as PostFormActions from '../actions/PostFormActions';
@@ -55,11 +56,18 @@ export class PostsByCategory extends Component {
         return [];
     };
 
+    goBackToHome = () => {
+        this.props.goBackToHome();
+    };
+
     render() {
         const { postForm, category } = this.props;
         const activePosts = this.getActivePosts();
         return (
             <div style={{ textAlign: 'center' }}>
+                <MenuComponent
+                    handleGoBackToHome={this.goBackToHome}
+                />
                 <Divider />
                 <Header as='h1' color='blue'>{Utils.capitalize(category)}</Header>
                 <PostListHeader />
@@ -101,7 +109,7 @@ function mapDispatchToProps(dispatch) {
     return {
         getPostsCategory: (data) => dispatch(PostActions.fetchPostsByCategory(data)),
         goToPostDetails: (postId, category) => dispatch(routerActions.push('/' + category + '/' + postId)),
-        goBackToHome: () => dispatch(routerActions.goBack()),
+        goBackToHome: () => dispatch(routerActions.push('/')),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         loadPosts: () => dispatch(PostActions.fetchPosts()),
         deletePost: (data) => dispatch(PostActions.deletePost(data)),

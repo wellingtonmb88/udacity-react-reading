@@ -118,7 +118,12 @@ export const fetchPostById = (postId) => dispatch => (
 
 export const fetchPostsByCategory = (category) => dispatch => (
     PostAPI.getPostsByCategory(category)
-        .then(posts => dispatch(loadPostsByCategory(category, posts)))
+        .then(posts => {
+            dispatch(loadPostsByCategory(category, posts))
+            return posts
+        })
+        .then(posts => posts.map(post => dispatch(fetchCommentsByPostId(post.id))))
+        .catch(error => dispatch(ServerErrorActions.showError()))
 );
 
 export const addNewPost = (post) => dispatch => (

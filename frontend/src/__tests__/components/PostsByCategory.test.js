@@ -53,6 +53,7 @@ const items = [
     }
 ];
 
+const getPostsCategorySpy = sinon.spy();
 const deletePostSpy = sinon.spy();
 const handleSubmitSpy = sinon.spy();
 const handleUpVoteCallbackSpy = sinon.spy();
@@ -72,6 +73,7 @@ const props = {
     deletePost: deletePostSpy,
     handleUpVoteCallback: handleUpVoteCallbackSpy,
     handleDownVoteCallback: handleDownVoteCallbackSpy,
+    getPostsCategory: getPostsCategorySpy,
     goToPostDetails: goToPostDetailsSpy,
     openPostEditor: openPostEditorSpy,
     openPostForm: openPostEditorSpy,
