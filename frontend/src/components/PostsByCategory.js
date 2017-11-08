@@ -111,7 +111,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        goToPostDetails: (data) => dispatch(routerActions.push('/postdetails/' + data)),
+        goToPostDetails: (postId, category) => dispatch(routerActions.push('/' + category + '/' + postId)),
         goBackToHome: () => dispatch(routerActions.goBack()),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         loadPosts: () => dispatch(PostActions.fetchPosts()),
