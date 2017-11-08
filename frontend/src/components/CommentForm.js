@@ -17,9 +17,11 @@ class CommentForm extends Component {
     componentDidMount() {
         const { comment } = this.props;
         if (comment) {
-            this.setState({ author: comment.author });
-            this.setState({ body: comment.body });
-            this.setState({ disableSubButton: false });
+            this.setState({
+                body: comment.body,
+                author: comment.author,
+                disableSubButton: false
+            });
         }
     };
 
@@ -46,10 +48,7 @@ class CommentForm extends Component {
     handleSubmit = () => {
         const { body, author } = this.state
         this.props.handleSubmit(author, body);
-
-        this.setState({ body: '' });
-        this.setState({ author: '' });
-        this.setState({ disableSubButton: true });
+        this.setState({ body: '', author: '', disableSubButton: true });
     };
 
     render() {

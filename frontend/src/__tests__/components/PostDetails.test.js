@@ -59,12 +59,15 @@ const openPostFormSpy = sinon.spy();
 const goBackToHomeSpy = sinon.spy();
 const upVoteSpy = sinon.spy();
 const downVoteSpy = sinon.spy();
+const mockPromise = Promise.resolve({})
+const getPostByIdSpy = jest.fn(() => mockPromise)
 
 const props = {
     postId: postId,
     posts: { items: items },
     openPostForm: openPostFormSpy,
     goBackToHome: goBackToHomeSpy,
+    getPostById: getPostByIdSpy,
     deletePost: deletePostSpy,
     upVote: upVoteSpy,
     downVote: downVoteSpy,

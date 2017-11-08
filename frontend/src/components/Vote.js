@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Button, Feed, Icon } from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 
-const margin10px = '10px';
-
 class Vote extends Component {
     static propTypes = {
         itemId: PropTypes.string.isRequired,
@@ -14,10 +12,10 @@ class Vote extends Component {
     render() {
         const { upVote, downVote, number, itemId } = this.props;
         return (
-            <div style={{ marginBottom: margin10px }}>
+            <div className="vote">
                 <Feed.Like>
                     <Icon name='like' />
-                    <span style={{ marginRight: margin10px }}>{number} Votes</span>
+                    <span className="votes-number">{number} Votes</span>
                     <Button
                         icon='thumbs outline up'
                         onClick={() => upVote(itemId)}
