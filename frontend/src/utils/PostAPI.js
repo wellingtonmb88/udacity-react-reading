@@ -10,10 +10,10 @@ export const getPostsByCategory = (category) =>
         .then(res => res.json())
         .then(data => data);
 
-// export const getPostById = (id) =>
-//     fetch(`${api}/posts/${id}`, { headers })
-//         .then(res => res.json())
-//         .then(data => data);
+export const getPostById = (id) =>
+    fetch(`${api}/posts/${id}`, { headers })
+        .then(res => res.json())
+        .then(data => data);
 
 export const addPost = (post) =>
     fetch(`${api}/posts`, {

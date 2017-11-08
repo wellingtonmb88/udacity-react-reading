@@ -2,6 +2,7 @@
 import * as PostAPI from '../utils/PostAPI';
 import * as ServerErrorActions from '../actions/ServerErrorActions';
 
+export const LOAD_POST = 'LOAD_POST';
 export const LOAD_POSTS = 'LOAD_POSTS';
 export const LOAD_POSTS_BY_CATEGORY = 'LOAD_POSTS_BY_CATEGORY';
 export const ADD_POST = 'ADD_POST';
@@ -12,6 +13,13 @@ export const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
 export const SORT_POSTS_BY_DATE = 'SORT_POSTS_BY_DATE';
 export const SORT_POSTS_BY_VOTE = 'SORT_POSTS_BY_VOTE';
 export const COMMENTS_BY_POST_ID = 'COMMENTS_BY_POST_ID';
+
+function loadPost(post) {
+    return {
+        type: LOAD_POST,
+        post
+    }
+};
 
 function loadPosts(posts) {
     return {
@@ -96,6 +104,16 @@ export const fetchPosts = () => dispatch => (
         })
         .then(posts => posts.map(post => dispatch(fetchCommentsByPostId(post.id))))
         .catch(error => dispatch(ServerErrorActions.showError()))
+);
+
+export const fetchPostById = (postId) => dispatch => (
+    PostAPI.getPostById(postId)
+        .then(post => {
+            dispatch(loadPost(post));
+            return post;
+        })
+        .catch(error => dispatch(ServerErrorActions.showError()))
+        .then(post => dispatch(fetchCommentsByPostId(post.id)))
 );
 
 export const fetchPostsByCategory = (category) => dispatch => (

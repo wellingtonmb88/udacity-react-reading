@@ -1,4 +1,5 @@
 import {
+    LOAD_POST,
     LOAD_POSTS,
     LOAD_POSTS_BY_CATEGORY,
     ADD_POST,
@@ -49,6 +50,12 @@ export function reducer(state = {}, action) {
     const { comment } = action;
 
     switch (action.type) {
+
+        case LOAD_POST:
+            return {
+                ...state,
+                items: [post]
+            }
 
         case LOAD_POSTS:
         case LOAD_POSTS_BY_CATEGORY:

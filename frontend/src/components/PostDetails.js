@@ -19,9 +19,13 @@ export class PostDetails extends Component {
     };
 
     componentDidMount() {
-        const { posts } = this.props;
+        const { posts, postId, getPostById } = this.props;
         if (posts.items === undefined) {
-            this.setState({ showError: true });
+            getPostById(postId).then( data => {
+                if(data.postId === undefined){
+                    this.setState({ showError: true });
+                }
+            });
         }
     };
 
@@ -29,7 +33,9 @@ export class PostDetails extends Component {
         const { posts, postId } = this.props;
         if (posts.items) {
             const post = posts.items.filter(item => item.id === postId)[0];
-            return post;
+            if (post !== undefined) {
+                return post;
+            }
         }
         return {};
     }
@@ -96,6 +102,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
+        getPostById: (data) => dispatch(PostActions.fetchPostById(data)),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
         goBackToHome: () => dispatch(routerActions.goBack()),
         upVote: (data) => dispatch(PostActions.upVotingPost(data)),

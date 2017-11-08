@@ -22,10 +22,8 @@ export class PostsByCategory extends Component {
     };
 
     componentDidMount() {
-        const { posts } = this.props;
-        if (posts.items === undefined) {
-            this.setState({ showError: true });
-        }
+        const { getPostsCategory, category } = this.props;
+        getPostsCategory(category)
     };
 
     handleUpVoteCallback = (postId) => {
@@ -57,21 +55,11 @@ export class PostsByCategory extends Component {
         return [];
     };
 
-    onModalClosed = () => {
-        this.setState({ showError: false });
-        this.props.goBackToHome();
-    };
-
     render() {
         const { postForm, category } = this.props;
         const activePosts = this.getActivePosts();
         return (
             <div style={{ textAlign: 'center' }}>
-                <ErrorMessage
-                    shouldShow={this.state.showError}
-                    header={errorHeader}
-                    message={errorMessage}
-                    onModalClosed={this.onModalClosed} />
                 <Divider />
                 <Header as='h1' color='blue'>{Utils.capitalize(category)}</Header>
                 <PostListHeader />
@@ -111,6 +99,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 function mapDispatchToProps(dispatch) {
     return {
+        getPostsCategory: (data) => dispatch(PostActions.fetchPostsByCategory(data)),
         goToPostDetails: (postId, category) => dispatch(routerActions.push('/' + category + '/' + postId)),
         goBackToHome: () => dispatch(routerActions.goBack()),
         openPostForm: (data) => dispatch(PostFormActions.openForm(data)),
